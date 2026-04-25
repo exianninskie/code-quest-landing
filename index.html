@@ -220,6 +220,20 @@
             fill: white;
         }
 
+        .audio-error {
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: #FF6B6B;
+            white-space: nowrap;
+            background: rgba(0,0,0,0.7);
+            padding: 2px 8px;
+            border-radius: 4px;
+            z-index: 20;
+        }
+
         .creator-profile h2 {
             font-size: 32px;
             font-weight: 900;
@@ -664,16 +678,13 @@
         <div class="creator-profile" id="creator">
             <div class="avatar-container">
                 <img src="creator_avatar.jpg" alt="Ninskie" class="creator-avatar">
-                <audio id="introAudio" preload="auto">
-                    <source src="https://exianninskie.github.io/code-quest-landing/intro.mp3" type="audio/mpeg">
-                    <source src="intro.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
+                <audio id="introAudio"></audio>
                 <button id="avatarPlayBtn" class="avatar-play-overlay" title="Play introduction">
                     <svg class="play-svg" id="playSvg" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z"/>
                     </svg>
                 </button>
+                <div id="audioError" class="audio-error" style="display:none;"></div>
             </div>
             <h2>Ninskie</h2>
             <h4>Master Architect & Creator</h4>
@@ -901,15 +912,47 @@
         const avatarPlayBtn = document.getElementById('avatarPlayBtn');
         const playSvg = document.getElementById('playSvg');
         const playPath = playSvg.querySelector('path');
+        const audioError = document.getElementById('audioError');
 
         let isPlaying = false;
+        let audioReady = false;
         audio.volume = 0.7;
-        audio.load();
 
         const playIconPath = 'M8 5v14l11-7z';
         const pauseIconPath = 'M6 19h4V5H6v14zm8-14v14h4V5h-4z';
 
+        function showError(msg) {
+            if (audioError) {
+                audioError.textContent = msg;
+                audioError.style.display = 'block';
+            }
+            console.error('[Audio]', msg);
+        }
+
+        // Try to load audio via fetch (bypasses GitHub Pages MIME type issues)
+        const audioUrl = 'https://exianninskie.github.io/code-quest-landing/intro.mp3';
+
+        fetch(audioUrl)
+            .then(response => {
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                return response.blob();
+            })
+            .then(blob => {
+                audio.src = URL.createObjectURL(blob);
+                audioReady = true;
+            })
+            .catch(err => {
+                // Fallback: try direct src (works if MIME type is correct)
+                audio.src = audioUrl;
+                audioReady = true;
+                showError('Fetch failed, trying direct load');
+            });
+
         avatarPlayBtn.addEventListener('click', () => {
+            if (!audioReady) {
+                showError('Audio not ready yet');
+                return;
+            }
             if (isPlaying) {
                 audio.pause();
                 avatarPlayBtn.classList.remove('playing');
@@ -920,8 +963,9 @@
                     avatarPlayBtn.classList.add('playing');
                     playPath.setAttribute('d', pauseIconPath);
                     isPlaying = true;
+                    if (audioError) audioError.style.display = 'none';
                 }).catch(error => {
-                    console.error('Audio play failed:', error);
+                    showError('Play blocked: ' + error.message);
                 });
             }
         });
@@ -930,6 +974,10 @@
             avatarPlayBtn.classList.remove('playing');
             playPath.setAttribute('d', playIconPath);
             isPlaying = false;
+        });
+
+        audio.addEventListener('error', () => {
+            showError('Audio load error');
         });
     </script>
 </body>
