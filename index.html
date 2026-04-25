@@ -257,56 +257,87 @@
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
         }
 
-        /* --- RELIABLE AUDIO PLAYER --- */
-        .audio-player-wrapper {
+        /* --- FANTASY AUDIO PLAYER --- */
+        .fantasy-audio-player {
             margin: 20px 0;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
             text-align: center;
         }
 
-        .custom-audio-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .play-btn {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #534AB7, #B4A8FF);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
+        .fantasy-btn {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border: 3px solid #FFD700;
+            border-radius: 12px;
+            color: #2C1810;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            font-size: 18px;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
         }
 
-        .play-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(83, 74, 183, 0.4);
+        .fantasy-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
         }
 
-        .play-btn.playing {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
+        .fantasy-btn:hover::before {
+            animation: shimmer 0.6s ease;
         }
 
-        .audio-info {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
         }
 
-        #audioStatus {
-            font-style: italic;
+        .fantasy-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.5);
+        }
+
+        .fantasy-btn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        .fantasy-btn.playing {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            border-color: #FF6B6B;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3); }
+            50% { box-shadow: 0 4px 30px rgba(255, 107, 107, 0.6); }
+        }
+
+        .btn-icon {
+            font-size: 24px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .btn-text {
+            letter-spacing: 1px;
         }
 
         /* --- FEATURES GRID --- */
@@ -673,19 +704,15 @@
             <h2>Ninskie</h2>
             <h4>Master Architect & Creator</h4>
             
-            <!-- Reliable Audio Player -->
-            <div class="audio-player-wrapper">
-                <audio id="introAudio" preload="auto">
+            <!-- Fantasy Audio Player -->
+            <div class="fantasy-audio-player">
+                <audio id="introAudio">
                     <source src="assets/audio/intro.mp3" type="audio/mpeg">
-                    <source src="assets/audio/intro.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
                 </audio>
-                <div class="custom-audio-controls">
-                    <button id="audioPlayBtn" class="play-btn">▶️ Play Intro</button>
-                    <div class="audio-info">
-                        <span id="audioStatus">Click to play introduction</span>
-                    </div>
-                </div>
+                <button id="hearYeBtn" class="fantasy-btn">
+                    <span class="btn-icon">🎭</span>
+                    <span class="btn-text">Hear Ye, Hear Ye!</span>
+                </button>
             </div>
             
             <div class="bio-box">
@@ -906,95 +933,39 @@
             });
         });
 
-        // Reliable Audio Player
+        // Fantasy Audio Player
         const audio = document.getElementById('introAudio');
-        const playBtn = document.getElementById('audioPlayBtn');
-        const audioStatus = document.getElementById('audioStatus');
+        const hearYeBtn = document.getElementById('hearYeBtn');
         
         let isPlaying = false;
-        let hasTriedAutoplay = false;
         
-        // Set volume to 70% for comfort
+        // Set volume to 70%
         audio.volume = 0.7;
         
-        // Toggle play/pause
-        function toggleAudio() {
+        // Toggle audio play/pause
+        hearYeBtn.addEventListener('click', () => {
             if (isPlaying) {
                 audio.pause();
-                playBtn.innerHTML = '▶️ Play Intro';
-                playBtn.classList.remove('playing');
-                audioStatus.textContent = 'Audio paused';
+                hearYeBtn.classList.remove('playing');
+                hearYeBtn.querySelector('.btn-text').textContent = 'Hear Ye, Hear Ye!';
                 isPlaying = false;
             } else {
-                // Try to play
                 audio.play().then(() => {
-                    playBtn.innerHTML = '⏸️ Pause Intro';
-                    playBtn.classList.add('playing');
-                    audioStatus.textContent = 'Playing introduction...';
+                    hearYeBtn.classList.add('playing');
+                    hearYeBtn.querySelector('.btn-text').textContent = 'Silence, Please!';
                     isPlaying = true;
                 }).catch(error => {
                     console.error('Audio play failed:', error);
-                    audioStatus.textContent = 'Audio failed to play - try again';
                 });
             }
-        }
-        
-        // Button click handler
-        playBtn.addEventListener('click', toggleAudio);
-        
-        // Audio event handlers
-        audio.addEventListener('loadstart', () => {
-            audioStatus.textContent = 'Loading audio...';
         });
         
-        audio.addEventListener('canplay', () => {
-            audioStatus.textContent = 'Ready to play';
-            // Try autoplay once
-            if (!hasTriedAutoplay) {
-                hasTriedAutoplay = true;
-                setTimeout(() => {
-                    audio.play().then(() => {
-                        playBtn.innerHTML = '⏸️ Pause Intro';
-                        playBtn.classList.add('playing');
-                        audioStatus.textContent = 'Playing introduction...';
-                        isPlaying = true;
-                    }).catch(() => {
-                        audioStatus.textContent = 'Click to play introduction';
-                    });
-                }, 1000);
-            }
-        });
-        
-        audio.addEventListener('error', (e) => {
-            console.error('Audio error:', e);
-            audioStatus.textContent = 'Audio file not found or error loading';
-            playBtn.innerHTML = '❌ Audio Error';
-            playBtn.disabled = true;
-        });
-        
+        // Reset button when audio ends
         audio.addEventListener('ended', () => {
-            playBtn.innerHTML = '▶️ Play Intro';
-            playBtn.classList.remove('playing');
-            audioStatus.textContent = 'Introduction finished - play again?';
+            hearYeBtn.classList.remove('playing');
+            hearYeBtn.querySelector('.btn-text').textContent = 'Hear Ye, Hear Ye!';
             isPlaying = false;
         });
-        
-        audio.addEventListener('play', () => {
-            playBtn.innerHTML = '⏸️ Pause Intro';
-            playBtn.classList.add('playing');
-            audioStatus.textContent = 'Playing introduction...';
-            isPlaying = true;
-        });
-        
-        audio.addEventListener('pause', () => {
-            playBtn.innerHTML = '▶️ Play Intro';
-            playBtn.classList.remove('playing');
-            audioStatus.textContent = 'Audio paused';
-            isPlaying = false;
-        });
-        
-        // Try to load the audio
-        audio.load();
     </script>
 </body>
 </html>
