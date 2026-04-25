@@ -686,11 +686,12 @@
                 </div>
                 <!-- Audio Player Next to Avatar -->
                 <div class="audio-player-next-to-avatar">
-                    <audio id="introAudio" preload="auto">
+                    <audio id="introAudio" preload="auto" controls style="width: 200px; height: 40px;">
                         <source src="assets/audio/intro.mp3" type="audio/mpeg">
                         <source src="./assets/audio/intro.mp3" type="audio/mpeg">
+                        Your browser does not support the audio element.
                     </audio>
-                    <button id="avatarPlayBtn" class="avatar-play-btn">
+                    <button id="avatarPlayBtn" class="avatar-play-btn" style="display: none;">
                         <span class="play-icon">▶️</span>
                     </button>
                 </div>
