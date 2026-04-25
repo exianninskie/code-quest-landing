@@ -1,0 +1,53 @@
+-- ─────────────────────────────────────────────────────────
+-- Migration 008: 30 Puzzles for Chapter 3 (Conditionals)
+-- ─────────────────────────────────────────────────────────
+
+DO $$ 
+DECLARE 
+  ch3_id UUID;
+BEGIN 
+  -- Find the Chapter 3 ID
+  SELECT id INTO ch3_id FROM chapters WHERE concept = 'conditionals' LIMIT 1;
+  
+  -- Clear any existing puzzles for Chapter 3 to prevent duplicates
+  DELETE FROM puzzles WHERE chapter_id = ch3_id;
+
+  -- ─── 10 Basic Puzzles (Position 1-10) ───
+  INSERT INTO puzzles (chapter_id, story_context, question, code_snippet, options, correct_answer, explanation, xp_reward, difficulty, position, hint) VALUES
+  (ch3_id, 'A fork in the path. "If you go left, you find gold."', 'How do you check if the variable `path` is equal to "left"?', 'var path = "left";', ARRAY['if (path == "left")', 'if (path = "left")', 'check (path == "left")', 'if path is "left"'], 'if (path == "left")', 'The "if" statement followed by a condition in parentheses is how branching starts.', 10, 'basic', 1, 'Use double equals for comparison!'),
+  (ch3_id, 'The Guardian asks for a secret word.', 'Which keyword provides a fallback if the "if" condition is false?', 'if (word == "spell") { ... }', ARRAY['else', 'then', 'other', 'otherwise'], 'else', 'The "else" block executes when the previous "if" condition evaluates to false.', 10, 'basic', 2, 'It''s the "otherwise" of coding.'),
+  (ch3_id, 'A magical lock requires a specific number.', 'Which operator checks if two numbers are exactly equal?', 'var key = 7;', ARRAY['==', '=', '===', 'eq'], '==', 'In Dart, == is the equality operator for comparing values.', 10, 'basic', 3, 'One equals is for assignment, two is for comparison.'),
+  (ch3_id, 'A warning sign glows red.', 'Which operator means "NOT"?', '...', ARRAY['!', 'not', '~', '!=.'], '!', 'The "!" (bang) operator negates a boolean value (true becomes false).', 10, 'basic', 4, 'It flips the truth.'),
+  (ch3_id, 'The Forest Spirit only lets the powerful pass.', 'How do you check if `power` is greater than 10?', 'var power = 15;', ARRAY['power > 10', 'power < 10', 'power >= 10', 'power == 10'], 'power > 10', 'The ">" operator checks if the left value is strictly greater than the right.', 10, 'basic', 5, 'Look at the direction of the arrow.'),
+  (ch3_id, 'A tiny bridge for tiny folk.', 'Check if `height` is less than 5.', 'var height = 3;', ARRAY['height < 5', 'height > 5', 'height <= 5', 'height != 5'], 'height < 5', 'The "<" operator checks if the left value is strictly less than the right.', 10, 'basic', 6, 'Small values pass through the small side.'),
+  (ch3_id, 'The Path of the Hero.', 'How to check if the boolean `isHero` is true?', 'bool isHero = true;', ARRAY['if (isHero)', 'if (isHero == true)', 'if (isHero is true)', '1 and 2'], '1 and 2', 'In an "if" statement, the condition just needs to evaluate to a boolean.', 10, 'basic', 7, 'You can be concise or explicit.'),
+  (ch3_id, 'The Forbidden Cave.', 'Check if the boolean `hasKey` is FALSE.', 'bool hasKey = false;', ARRAY['if (!hasKey)', 'if (hasKey == false)', 'if (hasKey is false)', '1 and 2'], '1 and 2', 'Using "!" negates the value, making it perfect for checking "false".', 10, 'basic', 8, 'Check for what you DON''T have.'),
+  (ch3_id, 'Requirement: Sword AND Shield.', 'Which operator represents logical AND?', '...', ARRAY['&&', '||', '&', 'and'], '&&', 'The "&&" operator returns true only if both sides are true.', 10, 'basic', 9, 'Both must be true to pass.'),
+  (ch3_id, 'Choice: Map OR Compass.', 'Which operator represents logical OR?', '...', ARRAY['||', '&&', '|', 'or'], '||', 'The "||" operator returns true if at least one side is true.', 10, 'basic', 10, 'Either one will lead the way.');
+
+  -- ─── 10 Intermediate Puzzles (Position 11-20) ───
+  INSERT INTO puzzles (chapter_id, story_context, question, code_snippet, options, correct_answer, explanation, xp_reward, difficulty, position, hint) VALUES
+  (ch3_id, 'A three-way crossroads.', 'How do you check a second condition if the first was false?', 'if (x == 1) { ... }', ARRAY['else if (x == 2)', 'else (x == 2)', 'then if (x == 2)', 'if (x == 2)'], 'else if (x == 2)', '"else if" allows you to chain multiple exclusive conditions.', 15, 'intermediate', 11, 'It goes between "if" and "else".'),
+  (ch3_id, 'The Sword of Swiftness.', 'What is the ternary shorthand for "if-else"?', '...', ARRAY['condition ? a : b', 'condition ?? a : b', 'if ? a : b', 'condition -> a'], 'condition ? a : b', 'The ternary operator (? :) is a concise way to choose between two values.', 15, 'intermediate', 12, 'Question, then true choice, then false choice.'),
+  (ch3_id, 'The Hall of Many Symbols.', 'Which keyword starts a multi-choice block based on a single value?', '...', ARRAY['switch', 'select', 'branch', 'choose'], 'switch', 'A "switch" statement evaluates an expression and matches it against cases.', 15, 'intermediate', 13, 'It "switches" between different paths.'),
+  (ch3_id, 'The break in the path.', 'Which keyword ends a case in a "switch" statement?', 'case "Gold": ...', ARRAY['break', 'stop', 'exit', 'end'], 'break', 'The "break" keyword prevents the code from "falling through" to the next case.', 15, 'intermediate', 14, 'Don''t let the logic spill over!'),
+  (ch3_id, 'Comparing magical names.', 'Is `name == "Arin"` case-sensitive?', 'var name = "arin";', ARRAY['Yes', 'No', 'Only for numbers', 'Depends on the environment'], 'Yes', 'Strings in Dart must match exactly, including capitalization.', 15, 'intermediate', 15, '"A" is not the same as "a".'),
+  (ch3_id, 'The Range Ritual.', 'Check if `xp` is between 1 and 99.', '...', ARRAY['if (xp > 0 && xp < 100)', 'if (0 < xp < 100)', 'if (xp > 0 || xp < 100)', 'if (xp between 1 and 99)'], 'if (xp > 0 && xp < 100)', 'You must use logical operators to combine two comparison checks.', 15, 'intermediate', 16, 'You need BOTH conditions to be true.'),
+  (ch3_id, 'The Universal Fallback.', 'Where does code go that runs if NO other condition matched?', '...', ARRAY['else', 'default', 'finally', 'catch'], 'else', 'The "else" block is the final "otherwise" for an if/else chain.', 15, 'intermediate', 17, 'The end of the line.'),
+  (ch3_id, 'The Switch Fallback.', 'What is the "none-of-the-above" keyword in a switch?', '...', ARRAY['default', 'else', 'others', 'null'], 'default', 'The "default" case handles anything that wasn''t specifically matched.', 15, 'intermediate', 18, 'The default response when unknown.'),
+  (ch3_id, 'The path of inequality.', 'How do you check if `role` is NOT "Wizard"?', 'var role = "Knight";', ARRAY['role != "Wizard"', 'role <> "Wizard"', 'role ! "Wizard"', 'role NOT "Wizard"'], 'role != "Wizard"', 'The "!=" operator checks for inequality (not equal to).', 15, 'intermediate', 19, 'It''s the opposite of ==.'),
+  (ch3_id, 'The Ternary Reward calculation.', '`var res = (mana > 50) ? "Strong" : "Weak";` If mana is 50, what is res?', 'var mana = 50;', ARRAY['"Weak"', '"Strong"', 'null', 'Error'], '"Weak"', 'Since 50 is not GREATER than 50, the false condition (Weak) is chosen.', 15, 'intermediate', 20, 'Greater than means strictly higher!');
+
+  -- ─── 10 Advanced Puzzles (Position 21-30) ───
+  INSERT INTO puzzles (chapter_id, story_context, question, code_snippet, options, correct_answer, explanation, xp_reward, difficulty, position, hint) VALUES
+  (ch3_id, 'A house within a house.', 'Putting an "if" inside another "if" is called...?', '...', ARRAY['Nesting', 'Boxing', 'Double-branching', 'Capping'], 'Nesting', 'Nesting allow for complex, multi-layered decision making.', 20, 'advanced', 21, 'Think of a bird''s home.'),
+  (ch3_id, 'The Ghostly Reference.', 'Check if the variable `scroll` is NOT null.', '...', ARRAY['scroll != null', 'scroll is not null', 'scroll.exists()', '!scroll'], 'scroll != null', 'Comparison with `null` is the standard way to check for missing values.', 20, 'advanced', 22, 'Check if there is anything there at all.'),
+  (ch3_id, 'The Null-Coalescing Path.', '`var name = input ?? "Stranger";` When is name "Stranger"?', 'var input = null;', ARRAY['Only when input is null', 'Only when input is empty', 'Always', 'Never'], 'Only when input is null', 'The `??` operator provides a default value only if the left side is null.', 20, 'advanced', 23, 'It only acts if the value is missing.'),
+  (ch3_id, 'The Modern Switch Expression (Dart 3+).', 'How to assign a value directly from a switch?', '...', ARRAY['var x = switch(y) { ... }', 'var x = y.switch { ... }', 'switch(y) { var x = ... }', 'Unsupported'], 'var x = switch(y) { ... }', 'Dart 3 introduced switch expressions that return values directly.', 20, 'advanced', 24, 'It lets the switch BE a value.'),
+  (ch3_id, 'Pattern Matching Ritual.', 'Can a case match a specific list structure like `[1, int x]?`', '...', ARRAY['Yes', 'No', 'Only for Strings', 'Only in Java'], 'Yes', 'Dart 3 patterns allow for powerful "destructuring" in switch cases.', 20, 'advanced', 25, 'The pattern must match the shape of the data.'),
+  (ch3_id, 'The "is" Type Trial.', 'How to check if `item` is a `Sword` class?', '...', ARRAY['item is Sword', 'item == Sword', 'item.type == Sword', 'typeof(item) == Sword'], 'item is Sword', 'The "is" operator performs runtime type checking.', 20, 'advanced', 26, 'Is it this type of thing?'),
+  (ch3_id, 'The Order of Operations.', 'In `a || b && c`, which operator evaluates first?', '...', ARRAY['&&', '||', 'Both at once', 'Depends on spacing'], '&&', 'Logical AND (&&) has higher precedence than logical OR (||).', 20, 'advanced', 27, 'AND comes before OR in the order of importance.'),
+  (ch3_id, 'Conditional Assignment.', 'When does `coins ??= 10;` assign the value?', '...', ARRAY['Only if coins is null', 'Every time', 'Only if coins is 0', 'Only if coins is negative'], 'Only if coins is null', 'The `??=` operator only assigns a value if the variable is currently null.', 20, 'advanced', 28, 'It only sets it if it''s empty.'),
+  (ch3_id, 'The Switch Guard (when).', 'How to add a secondary condition to a switch case?', '...', ARRAY['case x when condition:', 'case x if condition:', 'case x where condition:', 'case x && condition:'], 'case x when condition:', 'The "when" keyword adds a "guard" clause to a pattern match.', 20, 'advanced', 29, 'It puts a guard at the gate of the case.'),
+  (ch3_id, 'The Logical Inverse.', 'According to De Morgan''s law, `!(a && b)` is equivalent to...?', '...', ARRAY['!a || !b', '!a && !b', 'a || b', '!(a || b)'], '!a || !b', 'Distributing negation flips the operator from AND to OR.', 20, 'advanced', 30, 'Negate everything and flip the middle!');
+END $$;

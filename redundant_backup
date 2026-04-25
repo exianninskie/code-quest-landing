@@ -1,0 +1,423 @@
+-- Migration 016: Add Chapters 5, 6, 7 with puzzles
+-- Chapter 5: The Alchemist's Workshop (functions)
+-- Chapter 6: The Crystal Cavern (arrays/lists)  
+-- Chapter 7: The Dragon's Code (debugging)
+
+DO $$
+DECLARE
+  ch5_id UUID;
+  ch6_id UUID;
+  ch7_id UUID;
+BEGIN
+  -- Create Chapter 5: The Alchemist's Workshop (functions)
+  INSERT INTO chapters (title, story, concept, position, image_url)
+  VALUES (
+    'The Alchemist''s Workshop',
+    'You enter a workshop where potions are brewed using magical recipes. Each recipe is a function that transforms ingredients into powerful elixirs.',
+    'functions',
+    5,
+    'https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&q=80&w=800'
+  )
+  RETURNING id INTO ch5_id;
+
+  -- Create Chapter 6: The Crystal Cavern (arrays/lists)
+  INSERT INTO chapters (title, story, concept, position, image_url)
+  VALUES (
+    'The Crystal Cavern',
+    'Deep underground, you discover caverns filled with glowing crystals arranged in precise formations. Each crystal holds data, and together they form powerful arrays.',
+    'arrays',
+    6,
+    'https://images.unsplash.com/photo-1579532585985-1cdfedc6307e?auto=format&fit=crop&q=80&w=800'
+  )
+  RETURNING id INTO ch6_id;
+
+  -- Create Chapter 7: The Dragon's Code (debugging)
+  INSERT INTO chapters (title, story, concept, position, image_url)
+  VALUES (
+    'The Dragon''s Code',
+    'An ancient dragon guards sacred scrolls, but the code is cursed with bugs. You must spot the errors and fix the incantations to unlock the dragon''s wisdom.',
+    'debugging',
+    7,
+    'https://images.unsplash.com/photo-1518684079-3c17f22e2a60?auto=format&fit=crop&q=80&w=800'
+  )
+  RETURNING id INTO ch7_id;
+
+  -- Insert 30 puzzles for Chapter 5: The Alchemist's Workshop (functions)
+  INSERT INTO puzzles (chapter_id, story_context, question, code_snippet, type, options, correct_answer, explanation, xp_reward, difficulty, position, hint) VALUES
+  
+  -- Basic puzzles (1-10)
+  (ch5_id, 'The alchemist shows you a recipe scroll.', 'What is the basic structure to create a function?', '...', 'multipleChoice', 
+   ARRAY['function name() { }', 'name() = function', 'create function name', 'func name()'], 
+   'function name() { }', 'Functions use the function keyword, followed by name and parentheses.', 10, 'basic', 1, 'Think of the keyword that means "create a function"'),
+   
+  (ch5_id, 'A potion needs ingredients to work.', 'What do we call the values passed into a function?', 'brewPotion(herb, water)', 'multipleChoice',
+   ARRAY['Parameters', 'Arguments', 'Variables', 'Inputs'],
+   'Arguments', 'Arguments are the actual values passed when calling a function.', 10, 'basic', 2, 'These are the real values, not the placeholders'),
+   
+  (ch5_id, 'The recipe has placeholder slots.', 'What are the variable names in the function definition called?', 'function brew(herb, water)', 'multipleChoice',
+   ARRAY['Parameters', 'Arguments', 'Returns', 'Types'],
+   'Parameters', 'Parameters are the variable names defined in the function signature.', 10, 'basic', 3, 'These are the empty slots waiting for values'),
+   
+  (ch5_id, 'The alchemist completes a potion.', 'What keyword sends a value back from a function?', 'function brew() { return potion; }', 'multipleChoice',
+   ARRAY['return', 'output', 'send', 'yield'],
+   'return', 'The return keyword exits the function and sends back a value.', 10, 'basic', 4, 'Think of giving something back'),
+   
+  (ch5_id, 'Some recipes create nothing visible.', 'Can a function have no return value?', 'function stir() { print("stirring"); }', 'multipleChoice',
+   ARRAY['Yes', 'No', 'Only if empty', 'Never'],
+   'Yes', 'Functions can perform actions without returning values (void functions).', 10, 'basic', 5, 'Sometimes the action is the result'),
+   
+  (ch5_id, 'A simple spell to cast.', 'What is this one-line function called?', 'castSpell() => print("Fireball!")', 'multipleChoice',
+   ARRAY['Arrow function', 'Quick function', 'Short function', 'Magic function'],
+   'Arrow function', 'Arrow functions use => for concise one-line function bodies.', 10, 'basic', 6, 'Look for the arrow symbol'),
+   
+  (ch5_id, 'The alchemist calls upon an ancient recipe.', 'How do you execute/call a function?', 'function brew() { }', 'multipleChoice',
+   ARRAY['brew()', 'call brew()', 'execute brew()', 'run brew()'],
+   'brew()', 'Functions are called by using their name with parentheses.', 10, 'basic', 7, 'Add parentheses after the name'),
+   
+  (ch5_id, 'A potion recipe needs specific ingredient types.', 'What specifies what type of data a function returns?', 'String brewPotion()', 'multipleChoice',
+   ARRAY['Return type', 'Parameter type', 'Function type', 'Data type'],
+   'Return type', 'The type before the function name indicates what it returns.', 10, 'basic', 8, 'Look at what comes before the name'),
+   
+  (ch5_id, 'The workshop has many identical potion stations.', 'Can you have multiple functions with the same name?', '...', 'multipleChoice',
+   ARRAY['Yes, with different parameters', 'Never', 'Only in classes', 'Only if private'],
+   'Yes, with different parameters', 'Function overloading allows same name with different parameters.', 10, 'basic', 9, 'Same name, different signature'),
+   
+  (ch5_id, 'A recipe that can adapt to any ingredient.', 'What is a function that can take different numbers of arguments called?', 'mix(ingredient1, ingredient2, ...)', 'multipleChoice',
+   ARRAY['Variadic function', 'Flexible function', 'Multi function', 'Adaptive function'],
+   'Variadic function', 'Variadic functions accept a variable number of arguments.', 10, 'basic', 10, 'Varying number of parameters'),
+
+  -- Intermediate puzzles (11-20)
+  (ch5_id, 'The alchemist stores recipes for later use.', 'What is it called when you assign a function to a variable?', 'var brew = function() { }', 'multipleChoice',
+   ARRAY['Function expression', 'Function assignment', 'Function variable', 'Function storage'],
+   'Function expression', 'Function expressions assign anonymous functions to variables.', 15, 'intermediate', 11, 'Expression means it produces a value'),
+   
+  (ch5_id, 'A recipe that calls itself to refine the potion.', 'What is a function that calls itself called?', 'function refine(potion) { return refine(potion); }', 'multipleChoice',
+   ARRAY['Recursive', 'Infinite', 'Self-referential', 'Looping'],
+   'Recursive', 'Recursion is when a function calls itself to solve problems.', 15, 'intermediate', 12, 'Think of "recurring" or repeating'),
+   
+  (ch5_id, 'The alchemist passes a recipe to another alchemist.', 'What is it called when a function accepts another function as parameter?', 'function execute(recipe) { recipe(); }', 'multipleChoice',
+   ARRAY['Higher-order function', 'Callback function', 'Nested function', 'Function parameter'],
+   'Higher-order function', 'Higher-order functions operate on other functions.', 15, 'intermediate', 13, 'Functions that work with functions'),
+   
+  (ch5_id, 'A potion recipe created inside another recipe.', 'What is a function defined inside another function called?', 'function outer() { function inner() { } }', 'multipleChoice',
+   ARRAY['Nested function', 'Inner function', 'Child function', 'Local function'],
+   'Nested function', 'Functions can be defined within other functions'' scope.', 15, 'intermediate', 14, 'Like Russian nesting dolls'),
+   
+  (ch5_id, 'The alchemist prepares ingredients before the main brewing.', 'What is the benefit of breaking code into functions?', '...', 'multipleChoice',
+   ARRAY['Reusability and organization', 'Faster execution', 'Less memory', 'Required by language'],
+   'Reusability and organization', 'Functions make code modular and reusable.', 15, 'intermediate', 15, 'Think about why we organize things'),
+   
+  (ch5_id, 'A recipe with optional ingredients.', 'How do you give a parameter a default value?', 'function brew(herb, water = "clear")', 'multipleChoice',
+   ARRAY['Default parameter', 'Optional parameter', 'Fallback parameter', 'Safe parameter'],
+   'Default parameter', 'Default parameters provide values when none are supplied.', 15, 'intermediate', 16, 'The equals sign gives the default'),
+   
+  (ch5_id, 'The alchemist marks some recipes as private.', 'What limits access to a function?', 'private void secretRecipe()', 'multipleChoice',
+   ARRAY['Access modifier', 'Privacy setting', 'Scope keyword', 'Protection level'],
+   'Access modifier', 'Access modifiers like private control function visibility.', 15, 'intermediate', 17, 'Modifies who can access it'),
+   
+  (ch5_id, 'A recipe that works differently for different ingredients.', 'What is having multiple function versions called?', 'function mix(herb) vs function mix(herb, water)', 'multipleChoice',
+   ARRAY['Function overloading', 'Multiple functions', 'Function variants', 'Function duplication'],
+   'Function overloading', 'Overloading provides multiple implementations with different parameters.', 15, 'intermediate', 18, 'Over = more than one'),
+   
+  (ch5_id, 'The alchemist needs to know the recipe''s requirements.', 'What is function signature?', 'String brew(String herb, int amount)', 'multipleChoice',
+   ARRAY['Name, parameters, and return type', 'Just the name', 'Just parameters', 'The entire function body'],
+   'Name, parameters, and return type', 'Signature defines the function''s interface.', 15, 'intermediate', 19, 'Like a signature - identifies the function'),
+   
+  (ch5_id, 'A recipe that returns multiple results.', 'How can a function return multiple values?', '...', 'multipleChoice',
+   ARRAY['Array or object', 'Multiple returns', 'Reference parameters', 'Output parameters'],
+   'Array or object', 'Functions typically return a single value that can contain multiple items.', 15, 'intermediate', 20, 'Bundle them together'),
+
+  -- Advanced puzzles (21-30)
+  (ch5_id, 'The alchemist creates recipes on the fly.', 'What is a closure?', 'function outer() { var x = 5; return function() { return x; } }', 'multipleChoice',
+   ARRAY['Function with access to outer scope', 'Closed function', 'Sealed function', 'Private function'],
+   'Function with access to outer scope', 'Closures capture variables from their enclosing scope.', 20, 'advanced', 21, 'Closes over the variables it needs'),
+   
+  (ch5_id, 'A recipe that remembers previous attempts.', 'What is memoization?', '...', 'multipleChoice',
+   ARRAY['Caching function results', 'Memory optimization', 'Function memorization', 'Result storage'],
+   'Caching function results', 'Memoization stores results of expensive function calls.', 20, 'advanced', 22, 'Memory = memo'),
+   
+  (ch5_id, 'The alchemist chains multiple potion effects.', 'What is function composition?', 'add2(multiply3(5))', 'multipleChoice',
+   ARRAY['Combining functions', 'Chaining functions', 'Function addition', 'Function building'],
+   'Combining functions', 'Composition creates new functions by combining existing ones.', 20, 'advanced', 23, 'Like composing music'),
+   
+  (ch5_id, 'A recipe that can start, stop, and resume.', 'What is a generator function?', 'function* potionMaker()', 'multipleChoice',
+   ARRAY['Function that yields values', 'Function that generates code', 'Dynamic function', 'Infinite function'],
+   'Function that yields values', 'Generators can pause and resume, yielding multiple values.', 20, 'advanced', 24, 'Generates a sequence over time'),
+   
+  (ch5_id, 'The alchemist refers to a recipe by its essence.', 'What is a function pointer/reference?', 'var recipe = brewPotion', 'multipleChoice',
+   ARRAY['Reference to function', 'Function copy', 'Function alias', 'Function link'],
+   'Reference to function', 'Function references allow passing functions as data.', 20, 'advanced', 25, 'Points to the function'),
+   
+  (ch5_id, 'A recipe that transforms based on the alchemist''s needs.', 'What is a pure function?', '...', 'multipleChoice',
+   ARRAY['No side effects, same input = same output', 'Only uses pure ingredients', 'Simple function', 'Clean function'],
+   'No side effects, same input = same output', 'Pure functions are predictable and testable.', 20, 'advanced', 26, 'Pure = clean, predictable'),
+   
+  (ch5_id, 'The alchemist prepares ingredients in advance.', 'What is currying?', 'function(a) { return function(b) { return a + b; } }', 'multipleChoice',
+   ARRAY['Transforming function to sequence', 'Ingredient preparation', 'Function cooking', 'Parameter binding'],
+   'Transforming function to sequence', 'Currying converts multi-parameter functions to single-parameter chains.', 20, 'advanced', 27, 'Like curry - adding flavors one at a time'),
+   
+  (ch5_id, 'A recipe that adapts to any potion type.', 'What is a generic function?', 'Function<T> brew<T>(T ingredient)', 'multipleChoice',
+   ARRAY['Function with type parameters', 'Universal function', 'Flexible function', 'Multi-type function'],
+   'Function with type parameters', 'Generic functions work with any data type.', 20, 'advanced', 28, 'Generic = works for any type'),
+   
+  (ch5_id, 'The alchemist optimizes recipes for speed.', 'What is tail call optimization?', 'function recurse() { return recurse(); }', 'multipleChoice',
+   ARRAY['Optimizing recursive calls', 'Speed optimization', 'Call improvement', 'Stack optimization'],
+   'Optimizing recursive calls', 'TCO reuses stack frames for certain recursive calls.', 20, 'advanced', 29, 'Optimizes the tail/end of the function'),
+   
+  (ch5_id, 'The ultimate recipe transformation.', 'What is function decoration/wrapping?', 'function decorate(original) { return function() { ... original(); ... } }', 'multipleChoice',
+   ARRAY['Adding behavior to existing function', 'Function beautification', 'Function enhancement', 'Function packaging'],
+   'Adding behavior to existing function', 'Decorators wrap functions to add functionality.', 20, 'advanced', 30, 'Decorates the original function');
+
+  -- Insert 30 puzzles for Chapter 6: The Crystal Cavern (arrays/lists)
+  INSERT INTO puzzles (chapter_id, story_context, question, code_snippet, type, options, correct_answer, explanation, xp_reward, difficulty, position, hint) VALUES
+  
+  -- Basic puzzles (1-10)
+  (ch6_id, 'You find a line of glowing crystals.', 'How do you create an array of three gems?', '...', 'multipleChoice',
+   ARRAY['["ruby", "emerald", "sapphire"]', '("ruby", "emerald", "sapphire")', '{"ruby", "emerald", "sapphire"}', '<"ruby", "emerald", "sapphire">'],
+   '["ruby", "emerald", "sapphire"]', 'Arrays use square brackets with comma-separated values.', 10, 'basic', 1, 'Square brackets hold arrays'),
+   
+  (ch6_id, 'The first crystal shines brightest.', 'How do you get the first element from an array?', 'var crystals = ["red", "blue"];', 'multipleChoice',
+   ARRAY['crystals[0]', 'crystals[1]', 'crystals.first()', 'crystals.get(0)'],
+   'crystals[0]', 'Array indexing starts at 0, so the first element is at index 0.', 10, 'basic', 2, 'Count from zero, not one'),
+   
+  (ch6_id, 'You count all the crystals in the formation.', 'How do you find how many elements are in an array?', 'var crystals = ["a", "b", "c"];', 'multipleChoice',
+   ARRAY['crystals.length', 'crystals.size()', 'crystals.count', 'crystals.total'],
+   'crystals.length', 'The length property returns the number of elements in an array.', 10, 'basic', 3, 'Length measures the array'),
+   
+  (ch6_id, 'A new crystal appears in the cavern.', 'How do you add an element to the end of an array?', 'var crystals = ["red"];', 'multipleChoice',
+   ARRAY['crystals.add("blue")', 'crystals.push("blue")', 'crystals.insert("blue")', 'crystals.append("blue")'],
+   'crystals.add("blue")', 'The add() method appends an element to the end of the array.', 10, 'basic', 4, 'Add to the end'),
+   
+  (ch6_id, 'The last crystal fades away.', 'How do you remove the last element from an array?', 'var crystals = ["a", "b", "c"];', 'multipleChoice',
+   ARRAY['crystals.removeLast()', 'crystals.pop()', 'crystals.deleteLast()', 'crystals.takeLast()'],
+   'crystals.removeLast()', 'removeLast() removes and returns the last element.', 10, 'basic', 5, 'Remove from the end'),
+   
+  (ch6_id, 'You need to know if a specific crystal exists.', 'How do you check if an array contains a value?', 'var crystals = ["ruby", "emerald"];', 'multipleChoice',
+   ARRAY['crystals.contains("ruby")', 'crystals.has("ruby")', 'crystals.includes("ruby")', 'crystals.exists("ruby")'],
+   'crystals.contains("ruby")', 'The contains() method checks for the presence of a value.', 10, 'basic', 6, 'Does it contain this value?'),
+   
+  (ch6_id, 'The crystals rearrange themselves.', 'How do you sort an array?', 'var crystals = ["c", "a", "b"];', 'multipleChoice',
+   ARRAY['crystals.sort()', 'crystals.order()', 'crystals.arrange()', 'crystals.organize()'],
+   'crystals.sort()', 'The sort() method arranges elements in order.', 10, 'basic', 7, 'Sort puts things in order'),
+   
+  (ch6_id, 'An empty crystal formation appears.', 'How do you create an empty array?', '...', 'multipleChoice',
+   ARRAY['[]', '{}', '()', 'null'],
+   '[]', 'Empty square brackets create an empty array.', 10, 'basic', 8, 'Empty brackets'),
+   
+  (ch6_id, 'You combine two crystal formations.', 'How do you join two arrays?', 'var a = [1, 2]; var b = [3, 4];', 'multipleChoice',
+   ARRAY['a + b', 'a.concat(b)', 'a.join(b)', 'a.merge(b)'],
+   'a + b', 'The + operator concatenates (joins) two arrays.', 10, 'basic', 9, 'Add them together'),
+   
+  (ch6_id, 'A crystal at a specific position glows.', 'How do you change an element at a specific index?', 'var crystals = ["red", "blue"];', 'multipleChoice',
+   ARRAY['crystals[1] = "green"', 'crystals.set(1, "green")', 'crystals.change(1, "green")', 'crystals.update(1, "green")'],
+   'crystals[1] = "green"', 'Use bracket notation with assignment to change an element.', 10, 'basic', 10, 'Assign to the index'),
+
+  -- Intermediate puzzles (11-20)
+  (ch6_id, 'You need to extract a section of crystals.', 'How do you get a portion of an array?', 'var crystals = ["a", "b", "c", "d"];', 'multipleChoice',
+   ARRAY['crystals.sublist(1, 3)', 'crystals.slice(1, 3)', 'crystals.part(1, 3)', 'crystals.range(1, 3)'],
+   'crystals.sublist(1, 3)', 'sublist() returns a portion of the array.', 15, 'intermediate', 11, 'A sub-list is part of the list'),
+   
+  (ch6_id, 'The crystals need to be reversed.', 'How do you reverse the order of an array?', 'var crystals = ["a", "b", "c"];', 'multipleChoice',
+   ARRAY['crystals.reversed', 'crystals.reverse()', 'crystals.flip()', 'crystals.backwards()'],
+   'crystals.reversed', 'The reversed property returns the array in reverse order.', 15, 'intermediate', 12, 'Turn it around'),
+   
+  (ch6_id, 'You search for the brightest crystal.', 'How do you find the index of a specific element?', 'var crystals = ["red", "blue", "green"];', 'multipleChoice',
+   ARRAY['crystals.indexOf("blue")', 'crystals.index("blue")', 'crystals.find("blue")', 'crystals.position("blue")'],
+   'crystals.indexOf("blue")', 'indexOf() returns the index of the first matching element.', 15, 'intermediate', 13, 'Index of the element'),
+   
+  (ch6_id, 'Multiple crystals need to be removed.', 'How do you remove elements from an array?', 'var crystals = ["a", "b", "c", "d"];', 'multipleChoice',
+   ARRAY['crystals.removeRange(1, 3)', 'crystals.delete(1, 3)', 'crystals.cut(1, 3)', 'crystals.erase(1, 3)'],
+   'crystals.removeRange(1, 3)', 'removeRange() removes elements within a range.', 15, 'intermediate', 14, 'Remove a range of elements'),
+   
+  (ch6_id, 'You need to visit each crystal in order.', 'What is the best way to loop through an array?', 'var crystals = ["a", "b", "c"];', 'multipleChoice',
+   ARRAY['for (var crystal in crystals)', 'for (int i = 0; i < crystals.length; i++)', 'crystals.forEach()', 'All of the above'],
+   'All of the above', 'All these methods work for iterating arrays.', 15, 'intermediate', 15, 'Multiple ways to loop'),
+   
+  (ch6_id, 'The crystal formation gets duplicated.', 'How do you create a copy of an array?', 'var original = ["a", "b"];', 'multipleChoice',
+   ARRAY['original.toList()', 'original.copy()', 'original.clone()', 'original.duplicate()'],
+   'original.toList()', 'toList() creates a new list with the same elements.', 15, 'intermediate', 16, 'Convert to a new list'),
+   
+  (ch6_id, 'You need to check if any crystal is red.', 'How do you test if any element meets a condition?', 'var crystals = ["red", "blue"];', 'multipleChoice',
+   ARRAY['crystals.any((c) => c == "red")', 'crystals.some((c) => c == "red")', 'crystals.exists((c) => c == "red")', 'crystals.check((c) => c == "red")'],
+   'crystals.any((c) => c == "red")', 'any() returns true if any element satisfies the condition.', 15, 'intermediate', 17, 'Are any of them...'),
+   
+  (ch6_id, 'All crystals must be glowing.', 'How do you test if all elements meet a condition?', 'var crystals = ["red", "red"];', 'multipleChoice',
+   ARRAY['crystals.every((c) => c == "red")', 'crystals.all((c) => c == "red")', 'crystals.each((c) => c == "red")', 'crystals.allMatch((c) => c == "red")'],
+   'crystals.every((c) => c == "red")', 'every() returns true only if all elements satisfy the condition.', 15, 'intermediate', 18, 'Every single one'),
+   
+  (ch6_id, 'You transform each crystal into something new.', 'How do you transform each element in an array?', 'var numbers = [1, 2, 3];', 'multipleChoice',
+   ARRAY['numbers.map((n) => n * 2)', 'numbers.transform((n) => n * 2)', 'numbers.change((n) => n * 2)', 'numbers.convert((n) => n * 2)'],
+   'numbers.map((n) => n * 2)', 'map() creates a new array by transforming each element.', 15, 'intermediate', 19, 'Map each element to something new'),
+   
+  (ch6_id, 'You only want the glowing crystals.', 'How do you filter elements based on a condition?', 'var crystals = ["glowing", "dim", "bright"];', 'multipleChoice',
+   ARRAY['crystals.where((c) => c.contains("glowing"))', 'crystals.filter((c) => c.contains("glowing"))', 'crystals.select((c) => c.contains("glowing"))', 'crystals.keep((c) => c.contains("glowing"))'],
+   'crystals.where((c) => c.contains("glowing"))', 'where() returns elements that satisfy the condition.', 15, 'intermediate', 20, 'Where the condition is true'),
+
+  -- Advanced puzzles (21-30)
+  (ch6_id, 'The crystals form a multi-dimensional grid.', 'What is a 2D array?', 'var grid = [[1, 2], [3, 4]];', 'multipleChoice',
+   ARRAY['Array of arrays', 'Double array', 'Matrix array', 'Complex array'],
+   'Array of arrays', '2D arrays are arrays containing other arrays as elements.', 20, 'advanced', 21, 'Arrays within arrays'),
+   
+  (ch6_id, 'You need to flatten nested crystal formations.', 'How do you convert a 2D array to 1D?', 'var nested = [[1, 2], [3, 4]];', 'multipleChoice',
+   ARRAY['nested.expand((element) => element)', 'nested.flatten()', 'nested.flat()', 'nested.merge()'],
+   'nested.expand((element) => element)', 'expand() flattens nested arrays by expanding each element.', 20, 'advanced', 22, 'Expand the nested structure'),
+   
+  (ch6_id, 'The crystals need to be reduced to a single value.', 'How do you combine all elements into one value?', 'var numbers = [1, 2, 3, 4];', 'multipleChoice',
+   ARRAY['numbers.reduce((sum, n) => sum + n)', 'numbers.fold((sum, n) => sum + n)', 'numbers.accumulate((sum, n) => sum + n)', 'numbers.combine((sum, n) => sum + n)'],
+   'numbers.reduce((sum, n) => sum + n)', 'reduce() combines all elements into a single value.', 20, 'advanced', 23, 'Reduce many to one'),
+   
+  (ch6_id, 'You need to group crystals by their properties.', 'How do you group array elements by a key?', 'var crystals = ["red_gem", "blue_gem"];', 'multipleChoice',
+   ARRAY['crystals.groupBy((c) => c.split("_")[0])', 'crystals.group((c) => c.split("_")[0])', 'crystals.classify((c) => c.split("_")[0])', 'crystals.organize((c) => c.split("_")[0])'],
+   'crystals.groupBy((c) => c.split("_")[0])', 'groupBy() organizes elements into groups based on a key.', 20, 'advanced', 24, 'Group by common property'),
+   
+  (ch6_id, 'The crystal formation grows dynamically.', 'What is the difference between fixed and growable arrays?', '...', 'multipleChoice',
+   ARRAY['Fixed size vs dynamic resizing', 'Fast vs slow access', 'Old vs new syntax', 'Memory vs speed'],
+   'Fixed size vs dynamic resizing', 'Fixed arrays have set length, growable arrays can change size.', 20, 'advanced', 25, 'Can it grow or not?'),
+   
+  (ch6_id, 'You need to find crystals efficiently.', 'What is binary search in arrays?', '...', 'multipleChoice',
+   ARRAY['Search in sorted array by dividing range', 'Search with two pointers', 'Search with binary values', 'Search in binary arrays'],
+   'Search in sorted array by dividing range', 'Binary search efficiently finds elements in sorted arrays.', 20, 'advanced', 26, 'Divide and conquer search'),
+   
+  (ch6_id, 'The crystals must maintain their insertion order.', 'What data structure preserves insertion order?', '...', 'multipleChoice',
+   ARRAY['Linked list', 'Array', 'Stack', 'Queue'],
+   'Linked list', 'Linked lists maintain the order elements were added.', 20, 'advanced', 27, 'Like a chain of elements'),
+   
+  (ch6_id, 'You need to access crystals from both ends.', 'What data structure allows adding/removing from both ends?', '...', 'multipleChoice',
+   ARRAY['Deque (double-ended queue)', 'Array', 'Stack', 'Queue'],
+   'Deque (double-ended queue)', 'Deques support operations at both front and back.', 20, 'advanced', 28, 'Double-ended = both sides'),
+   
+  (ch6_id, 'The crystal formation must be unique.', 'How do you remove duplicates from an array?', 'var crystals = ["red", "blue", "red"];', 'multipleChoice',
+   ARRAY['crystals.toSet().toList()', 'crystals.unique()', 'crystals.distinct()', 'crystals.removeDuplicates()'],
+   'crystals.toSet().toList()', 'Converting to a Set removes duplicates, then back to List.', 20, 'advanced', 29, 'Sets have unique elements'),
+   
+  (ch6_id, 'You need to efficiently search crystal formations.', 'What is the time complexity of array access?', '...', 'multipleChoice',
+   ARRAY['O(1) - constant time', 'O(n) - linear time', 'O(log n) - logarithmic', 'O(n²) - quadratic'],
+   'O(1) - constant time', 'Direct array access by index is constant time.', 20, 'advanced', 30, 'Same time regardless of size');
+
+  -- Insert 30 puzzles for Chapter 7: The Dragon's Code (debugging)
+  INSERT INTO puzzles (chapter_id, story_context, question, code_snippet, type, options, correct_answer, explanation, xp_reward, difficulty, position, hint) VALUES
+  
+  -- Basic puzzles (1-10)
+  (ch7_id, 'The dragon shows you a cursed scroll with mismatched symbols.', 'What is wrong with this code? var x = 5; print(x]', 'multipleChoice',
+   ARRAY['Missing opening bracket', 'Missing closing bracket', 'Wrong variable name', 'Missing semicolon'],
+   'Missing opening bracket', 'Brackets must come in pairs: [ and ].', 10, 'basic', 1, 'Check bracket pairs'),
+   
+  (ch7_id, 'A spell that calls upon the wrong magic words.', 'What is the error here? printl("Hello World");', 'multipleChoice',
+   ARRAY['Misspelled function name', 'Missing quotes', 'Wrong parameter', 'Missing semicolon'],
+   'Misspelled function name', 'printl should be print for correct output.', 10, 'basic', 2, 'Check spelling carefully'),
+   
+  (ch7_id, 'The dragon reveals a potion recipe with impossible math.', 'What is wrong with this code? var result = 5 / 0;', 'multipleChoice',
+   ARRAY['Division by zero', 'Wrong operator', 'Invalid number', 'Missing variable'],
+   'Division by zero', 'You cannot divide a number by zero.', 10, 'basic', 3, 'Zero division is impossible'),
+   
+  (ch7_id, 'A cursed scroll with undeclared variables.', 'Find the error: print(message);', 'multipleChoice',
+   ARRAY['Variable not declared', 'Missing quotes', 'Wrong function', 'No error'],
+   'Variable not declared', 'message was never defined before use.', 10, 'basic', 4, 'Variables must exist before use'),
+   
+  (ch7_id, 'The dragon shows incomplete spell syntax.', 'What is missing? if x > 5 print("Big")', 'multipleChoice',
+   ARRAY['Missing braces', 'Missing semicolon', 'Missing parentheses', 'Missing quotes'],
+   'Missing braces', 'if statements need curly braces for the code block.', 10, 'basic', 5, 'Code blocks need braces'),
+   
+  (ch7_id, 'A potion recipe with the wrong ingredient types.', 'Find the bug: var name = "John"; name = 25;', 'multipleChoice',
+   ARRAY['Type mismatch', 'Wrong assignment', 'Invalid number', 'No error'],
+   'Type mismatch', 'Cannot assign a number to a string variable in typed languages.', 10, 'basic', 6, 'Types must match'),
+   
+  (ch7_id, 'The dragon reveals a loop that never ends.', 'What is wrong? while (true) { print("Forever"); }', 'multipleChoice',
+   ARRAY['Infinite loop', 'Missing condition', 'Wrong syntax', 'No error'],
+   'Infinite loop', 'while(true) never exits, causing infinite execution.', 10, 'basic', 7, 'Loops need exit conditions'),
+   
+  (ch7_id, 'A cursed array with invalid index.', 'Find the error: var arr = [1, 2]; print(arr[2]);', 'multipleChoice',
+   ARRAY['Index out of bounds', 'Wrong syntax', 'Missing element', 'No error'],
+   'Index out of bounds', 'Array indices go from 0 to length-1, so 2 is invalid.', 10, 'basic', 8, 'Indices start at 0'),
+   
+  (ch7_id, 'The dragon shows a function with no return.', 'What is wrong? function add(a, b) { var result = a + b; }', 'multipleChoice',
+   ARRAY['Missing return statement', 'Wrong parameters', 'Invalid calculation', 'No error'],
+   'Missing return statement', 'Function should return the result but doesn''t.', 10, 'basic', 9, 'Functions need to return values'),
+   
+  (ch7_id, 'A spell with quotes that don\'t match.', 'Find the bug: var message = "Hello'';', 'multipleChoice',
+   ARRAY['Mismatched quotes', 'Missing semicolon', 'Wrong variable', 'No error'],
+   'Mismatched quotes', 'String starts with double quote but ends with single quote.', 10, 'basic', 10, 'Quote types must match'),
+
+  -- Intermediate puzzles (11-20)
+  (ch7_id, 'The dragon reveals complex nested logic errors.', 'What is wrong? if (x > 5) { if (y < 10) { print("Both"); } }', 'multipleChoice',
+   ARRAY['Missing else clause', 'Wrong nesting', 'Invalid condition', 'No error'],
+   'No error', 'This code is syntactically correct.', 15, 'intermediate', 11, 'Sometimes there is no bug'),
+   
+  (ch7_id, 'A cursed function with parameter issues.', 'Find the error: function multiply(a, b) { return a * b; } multiply(5);', 'multipleChoice',
+   ARRAY['Missing argument', 'Wrong function name', 'Invalid return', 'No error'],
+   'Missing argument', 'multiply requires 2 arguments but only 1 is provided.', 15, 'intermediate', 12, 'Check parameter count'),
+   
+  (ch7_id, 'The dragon shows scope-related curses.', 'What is wrong? if (true) { var x = 5; } print(x);', 'multipleChoice',
+   ARRAY['Variable out of scope', 'Wrong condition', 'Invalid print', 'No error'],
+   'Variable out of scope', 'x is only accessible inside the if block.', 15, 'intermediate', 13, 'Scope limits variable access'),
+   
+  (ch7_id, 'A potion recipe with order of operations issues.', 'Find the bug: var result = 5 + 3 * 2;', 'multipleChoice',
+   ARRAY['No error (correct precedence)', 'Wrong order', 'Missing parentheses', 'Invalid calculation'],
+   'No error (correct precedence)', 'Multiplication happens before addition (3*2=6, then 5+6=11).', 15, 'intermediate', 14, 'Math follows precedence rules'),
+   
+  (ch7_id, 'The dragon reveals comparison vs assignment confusion.', 'What is wrong? if (x = 5) { print("Five"); }', 'multipleChoice',
+   ARRAY['Assignment instead of comparison', 'Wrong operator', 'Invalid condition', 'No error'],
+   'Assignment instead of comparison', 'Should use == for comparison, not = for assignment.', 15, 'intermediate', 15, '== compares, = assigns'),
+   
+  (ch7_id, 'A cursed loop with off-by-one errors.', 'Find the bug: for (int i = 0; i <= 10; i++) { print(i); } // Should print 0-9', 'multipleChoice',
+   ARRAY['Should be < 10, not <= 10', 'Wrong increment', 'Invalid range', 'No error'],
+   'Should be < 10, not <= 10', '<= 10 includes 10, making it 0-10 instead of 0-9.', 15, 'intermediate', 16, 'Off by one is common'),
+   
+  (ch7_id, 'The dragon shows null reference curses.', 'What is wrong? var name = null; print(name.length);', 'multipleChoice',
+   ARRAY['Null reference error', 'Wrong property', 'Invalid variable', 'No error'],
+   'Null reference error', 'Cannot access properties on null values.', 15, 'intermediate', 17, 'Null has no properties'),
+   
+  (ch7_id, 'A spell with floating-point precision issues.', 'Find the bug: var result = 0.1 + 0.2; // Expected 0.3', 'multipleChoice',
+   ARRAY['Floating point precision error', 'Wrong calculation', 'Invalid numbers', 'No error'],
+   'Floating point precision error', '0.1 + 0.2 = 0.30000000000000004 due to binary representation.', 15, 'intermediate', 18, 'Floats aren\'t always exact'),
+   
+  (ch7_id, 'The dragon reveals async/await curses.', 'What is wrong? async function getData() { return await fetch(); }', 'multipleChoice',
+   ARRAY['No error (correct syntax)', 'Missing await', 'Wrong function', 'Invalid async'],
+   'No error (correct syntax)', 'This is correct async/await usage.', 15, 'intermediate', 19, 'Async code looks different'),
+   
+  (ch7_id, 'A cursed regular expression pattern.', 'Find the error: var pattern = /[(]/;', 'multipleChoice',
+   ARRAY['Unescaped bracket', 'Wrong delimiter', 'Invalid pattern', 'No error'],
+   'Unescaped bracket', 'Opening bracket [ needs escaping or is part of character class.', 15, 'intermediate', 20, 'Special chars need escaping'),
+
+  -- Advanced puzzles (21-30)
+  (ch7_id, 'The dragon reveals memory leak curses.', 'What is wrong with this recursive function? function recurse() { return recurse(); }', 'multipleChoice',
+   ARRAY['Stack overflow from infinite recursion', 'Missing return', 'Wrong recursion', 'No error'],
+   'Stack overflow from infinite recursion', 'Infinite recursion will exhaust the call stack.', 20, 'advanced', 21, 'Recursion needs base case'),
+   
+  (ch7_id, 'A cursed race condition in concurrent code.', 'Find the bug: var counter = 0; // Multiple threads: counter++;', 'multipleChoice',
+   ARRAY['Race condition', 'Wrong increment', 'Invalid variable', 'No error'],
+   'Race condition', 'Concurrent access to counter without synchronization causes issues.', 20, 'advanced', 22, 'Concurrency needs synchronization'),
+   
+  (ch7_id, 'The dragon shows type coercion curses.', 'What is wrong? var result = "5" + 5;', 'multipleChoice',
+   ARRAY['Type coercion (string concatenation)', 'Wrong operator', 'Invalid types', 'No error'],
+   'Type coercion (string concatenation)', 'Results in "55" (string), not 10 (number).', 20, 'advanced', 23, 'Types can change unexpectedly'),
+   
+  (ch7_id, 'A potion recipe with prototype pollution.', 'Find the security issue: obj.__proto__.isAdmin = true;', 'multipleChoice',
+   ARRAY['Prototype pollution vulnerability', 'Wrong syntax', 'Invalid property', 'No error'],
+   'Prototype pollution vulnerability', 'Modifying __proto__ can affect all objects.', 20, 'advanced', 24, 'Prototype changes affect inheritance'),
+   
+  (ch7_id, 'The dragon reveals timing attack vulnerabilities.', 'What is wrong? if (password == user_input) { grant_access(); }', 'multipleChoice',
+   ARRAY['Timing attack vulnerability', 'Wrong comparison', 'Invalid logic', 'No error'],
+   'Timing attack vulnerability', 'String comparison time varies with input, leaking information.', 20, 'advanced', 25, 'Time differences can reveal data'),
+   
+  (ch7_id, 'A cursed callback hell pattern.', 'Find the maintainability issue: ajax(url1, function(res1) { ajax(url2, function(res2) { ajax(url3, function(res3) { ... }); }); });', 'multipleChoice',
+   ARRAY['Callback hell (pyramid of doom)', 'Wrong nesting', 'Invalid callbacks', 'No error'],
+   'Callback hell (pyramid of doom)', 'Deep nesting makes code hard to read and maintain.', 20, 'advanced', 26, 'Use promises/async instead'),
+   
+  (ch7_id, 'The dragon shows integer overflow curses.', 'What is wrong? var big = 2147483647 + 1;', 'multipleChoice',
+   ARRAY['Integer overflow', 'Wrong calculation', 'Invalid number', 'No error'],
+   'Integer overflow', 'Exceeding maximum integer value causes wraparound or error.', 20, 'advanced', 27, 'Numbers have limits'),
+   
+  (ch7_id, 'A cursed SQL injection vulnerability.', 'Find the security bug: query = "SELECT * FROM users WHERE id = " + user_id;', 'multipleChoice',
+   ARRAY['SQL injection vulnerability', 'Wrong query', 'Invalid syntax', 'No error'],
+   'SQL injection vulnerability', 'User input directly in query allows malicious SQL.', 20, 'advanced', 28, 'Never trust user input'),
+   
+  (ch7_id, 'The dragon reveals dead code elimination.', 'What is wrong? if (false) { print("Never runs"); }', 'multipleChoice',
+   ARRAY['Dead code (unreachable)', 'Wrong condition', 'Invalid logic', 'No error'],
+   'Dead code (unreachable)', 'Code inside if(false) will never execute.', 20, 'advanced', 29, 'Unreachable code is useless'),
+   
+  (ch7_id, 'A cursed memory management issue.', 'Find the bug: while (true) { var data = new Array(1000000); }', 'multipleChoice',
+   ARRAY['Memory leak (no garbage collection)', 'Wrong loop', 'Invalid array', 'No error'],
+   'Memory leak (no garbage collection)', 'Continuously creating large objects without cleanup causes memory exhaustion.', 20, 'advanced', 30, 'Memory is finite');
+
+END $$;

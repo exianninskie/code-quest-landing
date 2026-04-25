@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Quest | Master the Syntax, Become the Legend</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0A0A0F;
+            --purple-glow: #B4A8FF;
+            --purple-deep: #534AB7;
+            --gold: #FFD700;
+            --green-accent: #00E676;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: linear-gradient(rgba(10, 10, 15, 0.8), rgba(10, 10, 15, 0.8)), url('library_bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo span { color: #A855F7; }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--purple-glow); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 5% 60px 5%;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 8vw, 90px);
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: clamp(16px, 2vw, 20px);
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 700px;
+            margin-bottom: 40px;
+        }
+
+        /* --- HERO AURA BUTTON --- */
+        .btn-aura {
+            position: relative;
+            padding: 18px 40px;
+            background: var(--purple-glow);
+            color: var(--bg-dark);
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            font-size: 18px;
+            transition: transform 0.3s;
+            box-shadow: 0 0 20px rgba(180, 168, 255, 0.4);
+        }
+
+        .btn-aura::after {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border: 2px solid var(--purple-glow);
+            border-radius: 50px;
+            opacity: 0.5;
+            animation: pulse-aura 2s infinite;
+        }
+
+        @keyframes pulse-aura {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+
+        .btn-aura:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(180, 168, 255, 0.7);
+        }
+
+        /* --- ABOUT CREATOR --- */
+        .creator-profile {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 1s ease-in-out;
+            z-index: 10;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .avatar-container {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #FFD700, #B4A8FF, #534AB7, #FFD700);
+            padding: 4px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            margin-bottom: 20px;
+            animation: pulse-avatar 3s infinite;
+        }
+        
+        @keyframes pulse-avatar {
+            0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 35px rgba(255, 215, 0, 0.6); }
+            100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+        }
+
+        .creator-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #000;
+        }
+
+        .creator-profile h2 {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .creator-profile h4 {
+            font-size: 16px;
+            color: #B4A8FF;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            margin-bottom: 20px;
+        }
+
+        .bio-box {
+            background: rgba(0, 0, 0, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 800px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .bio-box p {
+            margin-bottom: 15px;
+        }
+        .bio-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .social-links-creator {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: rgba(83, 74, 183, 0.2);
+            border: 1px solid rgba(83, 74, 183, 0.5);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .social-btn:hover {
+            background: rgba(83, 74, 183, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .donate-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 30px;
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid #FFD700;
+            border-radius: 16px;
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: 900;
+            letter-spacing: 2px;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .donate-btn:hover {
+            background: rgba(255, 215, 0, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        /* --- FEATURES GRID --- */
+        .features {
+            padding: 100px 5%;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            border-radius: 16px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            border-color: var(--purple-glow);
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card .icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
+        /* --- TECH STACK SECTION --- */
+        .tech-stack-section {
+            padding: 100px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .tech-subsection {
+            margin-bottom: 80px;
+        }
+
+        .tech-grid, .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .tech-card, .app-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .tech-card:hover, .app-card:hover {
+            border-color: var(--purple-glow);
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tech-icon, .app-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .tech-card h4, .app-card h4 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .tech-card p, .app-card p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .projects-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, rgba(83, 74, 183, 0.1), rgba(180, 168, 255, 0.1));
+            border: 1px solid var(--purple-glow);
+            padding: 40px;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 48px;
+            font-weight: 900;
+            color: rgba(180, 168, 255, 0.2);
+        }
+
+        .project-card h4 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .project-card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .project-tech {
+            background: rgba(180, 168, 255, 0.1);
+            border: 1px solid rgba(180, 168, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--purple-glow);
+            display: inline-block;
+        }
+
+        .industry-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--purple-glow);
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .industry-logos h4 {
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .logos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .logo-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+        }
+
+        .brand-logo {
+            max-width: 120px;
+            max-height: 40px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: brightness(0.9) saturate(0.9);
+        }
+
+        /* --- BADGE SECTION --- */
+        .badges-section {
+            padding: 100px 5%;
+            text-align: center;
+        }
+
+        .badge-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+
+        .badge-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 140px;
+        }
+
+        .badge-circle {
+            width: 48px;
+            height: 48px;
+            background: var(--glass);
+            border: 4px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 15px;
+        }
+
+        @media (min-width: 700px) {
+            .badge-circle {
+                width: 110px;
+                height: 110px;
+            }
+        }
+
+        .badge-circle:hover {
+            transform: translateY(-5px) scale(1.05);
+        }
+
+        .badge-inner {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .star-icon {
+            width: 16px;
+            height: 16px;
+            fill: var(--bg-dark);
+        }
+
+        @media (min-width: 700px) {
+            .badge-inner {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .star-icon {
+                width: 28px;
+                height: 28px;
+            }
+        }
+
+        .badge-title {
+            font-weight: 700;
+            font-size: 15px;
+            text-align: center;
+            line-height: 1.2;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            letter-spacing: 0.5px;
+        }
+
+        /* Variables */
+        .badge-circle.variables { border-color: #534AB7; background: rgba(83, 74, 183, 0.1); }
+        .badge-circle.variables:hover { box-shadow: 0 0 20px rgba(83, 74, 183, 0.4); }
+        .badge-inner.variables-inner { background: #534AB7; }
+
+        /* Strings */
+        .badge-circle.strings { border-color: #2196F3; background: rgba(33, 150, 243, 0.1); }
+        .badge-circle.strings:hover { box-shadow: 0 0 20px rgba(33, 150, 243, 0.4); }
+        .badge-inner.strings-inner { background: #2196F3; }
+
+        /* Conditionals */
+        .badge-circle.conditionals { border-color: #D85A30; background: rgba(216, 90, 48, 0.1); }
+        .badge-circle.conditionals:hover { box-shadow: 0 0 20px rgba(216, 90, 48, 0.4); }
+        .badge-inner.conditionals-inner { background: #D85A30; }
+
+        /* Loops */
+        .badge-circle.loops { border-color: #1D9E75; background: rgba(29, 158, 117, 0.1); }
+        .badge-circle.loops:hover { box-shadow: 0 0 20px rgba(29, 158, 117, 0.4); }
+        .badge-inner.loops-inner { background: #1D9E75; }
+
+        /* Debugging */
+        .badge-circle.debugging { border-color: #FFD700; background: rgba(255, 215, 0, 0.1); }
+        .badge-circle.debugging:hover { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
+        .badge-inner.debugging-inner { background: #FFD700; }
+
+        .badge-item span { font-weight: 700; font-size: 10px; margin-top: 10px; letter-spacing: 1px; }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 60px 5%;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+        }
+
+        .social-link {
+            color: var(--purple-glow);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 50px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">
+            CODE <span>QUEST</span>
+        </a>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#tech-stack">Tech Stack</a>
+            <a href="#badges">Badges</a>
+            <a href="https://discord.gg/pqXKAqmB" target="_blank" class="social-link">Discord</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>CONQUER CODE.<br>FORGE LEGACY.</h1>
+        <p>An epic fantasy-gamified coding platform where variables are gems, loops are eternal staircases, and every line of code is a spell.</p>
+        
+        <div class="creator-profile" id="creator">
+            <div class="avatar-container">
+                <img src="creator_avatar.jpg" alt="Ninskie" class="creator-avatar">
+            </div>
+            <h2>Ninskie</h2>
+            <h4>Master Architect & Creator</h4>
+            <div class="bio-box">
+                <p>Welcome to Code Quest!</p>
+                <p>I built this adventure to make learning code immersive, challenging,<br>and epic.</p>
+                <p>Every chapter, puzzle, and concept you encounter here was forged to bridge the gap between dry tutorials and the actual magic of software development. Whether you're just starting out or honing your craft,<br>I hope you enjoy the journey as much as I enjoyed crafting it!</p>
+                <p>Feel free to connect with me, explore my other projects, or just say hi!</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="features" id="features">
+        <h2 style="font-size: 40px; text-align: center; margin-bottom: 60px;">FEATURES</h2>
+        <div class="features-grid">
+            <div class="card">
+                <span class="icon">🧩</span>
+                <h3>The Puzzle</h3>
+                <p>Put your knowledge to the ultimate test. Solve intricately crafted coding puzzles scattered throughout the realm to forge unbreakable logic skills.</p>
+            </div>
+            <div class="card">
+                <span class="icon">🔗</span>
+                <h3>The Soul Link</h3>
+                <p>Connect with fellow adventurers in real-time. Share your achievements, chat in the global realm, and see live user auras pulse with power.</p>
+            </div>
+            <div class="card">
+                <span class="icon">✨</span>
+                <h3>Hero Auras</h3>
+                <p>Your profile is alive. As you master concepts like Variables or Loops, your unique aura changes color to reflect your growing mastery.</p>
+            </div>
+            <div class="card">
+                <span class="icon">🏰</span>
+                <h3>The Grotto Trials</h3>
+                <p>Solve logic-puzzles inspired by ancient ruins. Earn XP, level up, and unlock certificates signed by the Great Alchemists.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="badges-section" id="badges">
+        <h2 style="font-size: 40px;">COLLECT THE LEGENDARY BADGES</h2>
+        <div class="badge-grid">
+            <div class="badge-wrapper">
+                <div class="badge-circle variables">
+                    <div class="badge-inner variables-inner">
+                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                </div>
+                <span class="badge-title">The Enchanted<br>Library</span>
+            </div>
+            <div class="badge-wrapper">
+                <div class="badge-circle strings">
+                    <div class="badge-inner strings-inner">
+                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                </div>
+                <span class="badge-title">The Weaver's<br>Loom</span>
+            </div>
+            <div class="badge-wrapper">
+                <div class="badge-circle conditionals">
+                    <div class="badge-inner conditionals-inner">
+                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                </div>
+                <span class="badge-title">The Whispering<br>Forest</span>
+            </div>
+            <div class="badge-wrapper">
+                <div class="badge-circle loops">
+                    <div class="badge-inner loops-inner">
+                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                </div>
+                <span class="badge-title">The Eternal<br>Staircase</span>
+            </div>
+            <div class="badge-wrapper">
+                <div class="badge-circle debugging">
+                    <div class="badge-inner debugging-inner">
+                        <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                </div>
+                <span class="badge-title">The Glitchy<br>Grotto</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- TECH STACK SECTION --- */ -->
+    <section class="tech-stack-section" id="tech-stack">
+        <h2 style="font-size: 40px; text-align: center; margin-bottom: 60px;">MASTER THE TOOLS OF LEGEND</h2>
+        
+        <!-- Technologies Taught -->
+        <div class="tech-subsection">
+            <h3 style="font-size: 28px; color: #B4A8FF; margin-bottom: 30px;">Technologies You'll Master</h3>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-icon">🎯</div>
+                    <h4>Dart Programming</h4>
+                    <p>Modern, type-safe language perfect for building scalable applications</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">📱</div>
+                    <h4>Flutter Framework</h4>
+                    <p>Build beautiful, natively compiled apps for mobile, web, and desktop</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">🔧</div>
+                    <h4>State Management</h4>
+                    <p>Master Provider, BLoC, and Riverpod for robust app architecture</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">🌐</div>
+                    <h4>REST APIs & Firebase</h4>
+                    <p>Connect your apps to backend services and real-time databases</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-World Applications -->
+        <div class="tech-subsection">
+            <h3 style="font-size: 28px; color: #B4A8FF; margin-bottom: 30px;">Real-World Applications</h3>
+            <div class="applications-grid">
+                <div class="app-card">
+                    <div class="app-icon">💼</div>
+                    <h4>Business Apps</h4>
+                    <p>Inventory management, CRM systems, financial dashboards</p>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">🎮</div>
+                    <h4>Gaming & Entertainment</h4>
+                    <p>Interactive games, educational apps, multimedia experiences</p>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">🏥</div>
+                    <h4>Healthcare Solutions</h4>
+                    <p>Patient tracking, telemedicine, health monitoring apps</p>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon">🛍️</div>
+                    <h4>E-commerce Platforms</h4>
+                    <p>Shopping apps, payment systems, customer portals</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Projects -->
+        <div class="tech-subsection">
+            <h3 style="font-size: 28px; color: #B4A8FF; margin-bottom: 30px;">Portfolio Projects You'll Build</h3>
+            <div class="projects-showcase">
+                <div class="project-card">
+                    <div class="project-number">01</div>
+                    <h4>Quest Tracker App</h4>
+                    <p>Complete task management system with real-time sync and notifications</p>
+                    <div class="project-tech">Flutter • Firebase • Provider</div>
+                </div>
+                <div class="project-card">
+                    <div class="project-number">02</div>
+                    <h4>Alchemy Calculator</h4>
+                    <p>Advanced calculator with custom functions and beautiful UI animations</p>
+                    <div class="project-tech">Flutter • Dart • Advanced UI</div>
+                </div>
+                <div class="project-card">
+                    <div class="project-number">03</div>
+                    <h4>Guild Chat Platform</h4>
+                    <p>Real-time messaging app with channels, user profiles, and media sharing</p>
+                    <div class="project-tech">Flutter • WebSockets • BLoC</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Industry Relevance -->
+        <div class="tech-subsection">
+            <h3 style="font-size: 28px; color: #B4A8FF; margin-bottom: 30px;">Industry Relevance</h3>
+            <div class="industry-stats">
+                <div class="stat-card">
+                    <div class="stat-number">$120K</div>
+                    <div class="stat-label">Average Flutter Developer Salary</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">500K+</div>
+                    <div class="stat-label">Flutter Apps in App Stores</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <div class="stat-label">Faster Development with Flutter</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Top 5</div>
+                    <div class="stat-label">Most Loved Framework 2024</div>
+                </div>
+            </div>
+            <div class="industry-logos">
+                <h4 style="text-align: center; margin-bottom: 30px;">Trusted by Industry Leaders</h4>
+                <div class="logos-grid">
+                    <div class="logo-item">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" class="brand-logo">
+                    </div>
+                    <div class="logo-item">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft" class="brand-logo">
+                    </div>
+                    <div class="logo-item">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" alt="BMW" class="brand-logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Code Quest by Ninskie. Built for the next generation of Logic Sorcerers.</p>
+        <p style="margin-top: 10px;">Connect on <a href="https://discord.gg/pqXKAqmB" target="_blank" class="social-link">Discord</a> | Power Level: 9000+</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

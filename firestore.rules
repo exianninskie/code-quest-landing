@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/$(database)/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Auto-refill logic for potions
+      match /autoRefill/{doc} {
+        allow create: if request.resource.data.potions is int &&
+           request.time > resource('.data/existing').field('last_refill').value + duration.asMilliseconds(600000);
+        allow update: if request.resource.data.potions is int;
+      }
+
+      // Profile updates
+      allow update: if request.resource.data.avatar_url is string &&
+                      request.resource.data.username is string;
+    }
+  }
+}
