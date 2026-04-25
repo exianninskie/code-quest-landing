@@ -257,34 +257,56 @@
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
         }
 
-        /* --- SIMPLE AUDIO PLAYER --- */
-        .simple-audio-player {
+        /* --- RELIABLE AUDIO PLAYER --- */
+        .audio-player-wrapper {
             margin: 20px 0;
-            padding: 12px;
+            padding: 16px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--glass-border);
-            border-radius: 8px;
+            border-radius: 12px;
             backdrop-filter: blur(10px);
-            display: inline-block;
+            text-align: center;
         }
 
-        .simple-audio-player audio {
-            width: 100%;
-            max-width: 300px;
-            height: 40px;
-            outline: none;
+        .custom-audio-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
-        /* Style the native audio controls to match theme */
-        .simple-audio-player audio::-webkit-media-controls-panel {
-            background-color: rgba(83, 74, 183, 0.8);
-            border-radius: 4px;
+        .play-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #534AB7, #B4A8FF);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .simple-audio-player audio::-webkit-media-controls-play-button,
-        .simple-audio-player audio::-webkit-media-controls-timeline,
-        .simple-audio-player audio::-webkit-media-controls-volume-slider {
-            filter: invert(1);
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(83, 74, 183, 0.4);
+        }
+
+        .play-btn.playing {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+        }
+
+        .audio-info {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        #audioStatus {
+            font-style: italic;
         }
 
         /* --- FEATURES GRID --- */
@@ -651,12 +673,19 @@
             <h2>Ninskie</h2>
             <h4>Master Architect & Creator</h4>
             
-            <!-- Simple Audio Player -->
-            <div class="simple-audio-player">
-                <audio id="introAudio" autoplay controls>
+            <!-- Reliable Audio Player -->
+            <div class="audio-player-wrapper">
+                <audio id="introAudio" preload="auto">
+                    <source src="assets/audio/intro.mp3" type="audio/mpeg">
                     <source src="assets/audio/intro.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+                <div class="custom-audio-controls">
+                    <button id="audioPlayBtn" class="play-btn">▶️ Play Intro</button>
+                    <div class="audio-info">
+                        <span id="audioStatus">Click to play introduction</span>
+                    </div>
+                </div>
             </div>
             
             <div class="bio-box">
@@ -877,20 +906,95 @@
             });
         });
 
-        // Simple Audio Autoplay
+        // Reliable Audio Player
         const audio = document.getElementById('introAudio');
+        const playBtn = document.getElementById('audioPlayBtn');
+        const audioStatus = document.getElementById('audioStatus');
+        
+        let isPlaying = false;
+        let hasTriedAutoplay = false;
         
         // Set volume to 70% for comfort
         audio.volume = 0.7;
         
-        // Try to autoplay (browsers may block this)
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                audio.play().catch(error => {
-                    console.log('Autoplay prevented - user can click to play');
+        // Toggle play/pause
+        function toggleAudio() {
+            if (isPlaying) {
+                audio.pause();
+                playBtn.innerHTML = '▶️ Play Intro';
+                playBtn.classList.remove('playing');
+                audioStatus.textContent = 'Audio paused';
+                isPlaying = false;
+            } else {
+                // Try to play
+                audio.play().then(() => {
+                    playBtn.innerHTML = '⏸️ Pause Intro';
+                    playBtn.classList.add('playing');
+                    audioStatus.textContent = 'Playing introduction...';
+                    isPlaying = true;
+                }).catch(error => {
+                    console.error('Audio play failed:', error);
+                    audioStatus.textContent = 'Audio failed to play - try again';
                 });
-            }, 500);
+            }
+        }
+        
+        // Button click handler
+        playBtn.addEventListener('click', toggleAudio);
+        
+        // Audio event handlers
+        audio.addEventListener('loadstart', () => {
+            audioStatus.textContent = 'Loading audio...';
         });
+        
+        audio.addEventListener('canplay', () => {
+            audioStatus.textContent = 'Ready to play';
+            // Try autoplay once
+            if (!hasTriedAutoplay) {
+                hasTriedAutoplay = true;
+                setTimeout(() => {
+                    audio.play().then(() => {
+                        playBtn.innerHTML = '⏸️ Pause Intro';
+                        playBtn.classList.add('playing');
+                        audioStatus.textContent = 'Playing introduction...';
+                        isPlaying = true;
+                    }).catch(() => {
+                        audioStatus.textContent = 'Click to play introduction';
+                    });
+                }, 1000);
+            }
+        });
+        
+        audio.addEventListener('error', (e) => {
+            console.error('Audio error:', e);
+            audioStatus.textContent = 'Audio file not found or error loading';
+            playBtn.innerHTML = '❌ Audio Error';
+            playBtn.disabled = true;
+        });
+        
+        audio.addEventListener('ended', () => {
+            playBtn.innerHTML = '▶️ Play Intro';
+            playBtn.classList.remove('playing');
+            audioStatus.textContent = 'Introduction finished - play again?';
+            isPlaying = false;
+        });
+        
+        audio.addEventListener('play', () => {
+            playBtn.innerHTML = '⏸️ Pause Intro';
+            playBtn.classList.add('playing');
+            audioStatus.textContent = 'Playing introduction...';
+            isPlaying = true;
+        });
+        
+        audio.addEventListener('pause', () => {
+            playBtn.innerHTML = '▶️ Play Intro';
+            playBtn.classList.remove('playing');
+            audioStatus.textContent = 'Audio paused';
+            isPlaying = false;
+        });
+        
+        // Try to load the audio
+        audio.load();
     </script>
 </body>
 </html>
