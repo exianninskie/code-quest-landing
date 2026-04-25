@@ -257,17 +257,26 @@
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
         }
 
-        /* --- AVATAR AUDIO PLAYER --- */
-        .avatar-audio-overlay {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            z-index: 10;
+        /* --- CREATOR HEADER LAYOUT --- */
+        .creator-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 200px;
+        }
+
+        /* --- AUDIO PLAYER NEXT TO AVATAR --- */
+        .audio-player-next-to-avatar {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
         }
 
         .avatar-play-btn {
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: rgba(83, 74, 183, 0.9);
             border: 2px solid #FFD700;
@@ -308,7 +317,7 @@
         }
 
         .play-icon {
-            font-size: 20px;
+            font-size: 18px;
             color: white;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
@@ -671,12 +680,15 @@
         <p>An epic fantasy-gamified coding platform where variables are gems, loops are eternal staircases, and every line of code is a spell.</p>
         
         <div class="creator-profile" id="creator">
-            <div class="avatar-container">
-                <img src="creator_avatar.jpg" alt="Ninskie" class="creator-avatar">
-                <!-- Avatar Audio Player -->
-                <div class="avatar-audio-overlay">
+            <div class="creator-header">
+                <div class="avatar-container">
+                    <img src="creator_avatar.jpg" alt="Ninskie" class="creator-avatar">
+                </div>
+                <!-- Audio Player Next to Avatar -->
+                <div class="audio-player-next-to-avatar">
                     <audio id="introAudio" preload="auto">
                         <source src="assets/audio/intro.mp3" type="audio/mpeg">
+                        <source src="./assets/audio/intro.mp3" type="audio/mpeg">
                     </audio>
                     <button id="avatarPlayBtn" class="avatar-play-btn">
                         <span class="play-icon">▶️</span>
@@ -911,23 +923,43 @@
         
         let isPlaying = false;
         
+        // Debug audio loading
+        console.log('Audio element:', audio);
+        console.log('Audio sources:', audio.querySelectorAll('source'));
+        
         // Set volume to 70%
         audio.volume = 0.7;
         
+        // Audio event listeners for debugging
+        audio.addEventListener('loadstart', () => console.log('Loading audio...'));
+        audio.addEventListener('loadeddata', () => console.log('Audio data loaded'));
+        audio.addEventListener('canplay', () => console.log('Audio can play'));
+        audio.addEventListener('error', (e) => console.error('Audio error:', e));
+        
+        // Try to load audio
+        audio.load();
+        console.log('Audio load() called');
+        
         // Toggle audio play/pause
         avatarPlayBtn.addEventListener('click', () => {
+            console.log('Button clicked, isPlaying:', isPlaying);
+            
             if (isPlaying) {
                 audio.pause();
                 avatarPlayBtn.classList.remove('playing');
                 playIcon.textContent = '▶️';
                 isPlaying = false;
+                console.log('Audio paused');
             } else {
+                console.log('Attempting to play audio...');
                 audio.play().then(() => {
                     avatarPlayBtn.classList.add('playing');
                     playIcon.textContent = '⏸️';
                     isPlaying = true;
+                    console.log('Audio playing successfully');
                 }).catch(error => {
                     console.error('Audio play failed:', error);
+                    alert('Audio play failed: ' + error.message);
                 });
             }
         });
@@ -937,6 +969,7 @@
             avatarPlayBtn.classList.remove('playing');
             playIcon.textContent = '▶️';
             isPlaying = false;
+            console.log('Audio ended');
         });
     </script>
 </body>
