@@ -158,6 +158,7 @@
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
             margin-bottom: 20px;
             animation: pulse-avatar 3s infinite;
+            position: relative;
         }
         
         @keyframes pulse-avatar {
@@ -172,6 +173,51 @@
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #000;
+        }
+
+        .avatar-play-overlay {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #534AB7, #B4A8FF);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+        }
+
+        .avatar-play-overlay:hover {
+            transform: scale(1.15);
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-color: #FFD700;
+        }
+
+        .avatar-play-overlay:active {
+            transform: scale(0.95);
+        }
+
+        .avatar-play-overlay.playing {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            border-color: #FF6B6B;
+            animation: overlayPulse 1.5s infinite;
+        }
+
+        @keyframes overlayPulse {
+            0%, 100% { box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3); }
+            50% { box-shadow: 0 4px 16px rgba(255, 107, 107, 0.6); }
+        }
+
+        .play-svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
         }
 
         .creator-profile h2 {
@@ -257,78 +303,6 @@
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
         }
 
-        /* --- CREATOR HEADER LAYOUT --- */
-        .creator-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            width: 100%;
-            max-width: 200px;
-        }
-
-        /* --- AUDIO PLAYER NEXT TO AVATAR --- */
-        .audio-player-next-to-avatar {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-        }
-
-        .avatar-play-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(83, 74, 183, 0.9);
-            border: 2px solid #FFD700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .avatar-play-btn:hover {
-            background: rgba(255, 215, 0, 0.9);
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
-        }
-
-        .avatar-play-btn:active {
-            transform: scale(0.95);
-        }
-
-        .avatar-play-btn.playing {
-            background: rgba(255, 107, 107, 0.9);
-            border-color: #FF6B6B;
-            animation: avatarPulse 2s infinite;
-        }
-
-        @keyframes avatarPulse {
-            0%, 100% { 
-                box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
-                border-color: #FF6B6B;
-            }
-            50% { 
-                box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
-                border-color: #FF8E53;
-            }
-        }
-
-        .play-icon {
-            font-size: 18px;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-        }
-
-        .audio-status {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 4px;
-            text-align: center;
-            white-space: nowrap;
-        }
 
         /* --- FEATURES GRID --- */
         .features {
@@ -688,22 +662,18 @@
         <p>An epic fantasy-gamified coding platform where variables are gems, loops are eternal staircases, and every line of code is a spell.</p>
         
         <div class="creator-profile" id="creator">
-            <div class="creator-header">
-                <div class="avatar-container">
-                    <img src="creator_avatar.jpg" alt="Ninskie" class="creator-avatar">
-                </div>
-                <!-- Audio Player Next to Avatar -->
-                <div class="audio-player-next-to-avatar">
-                    <audio id="introAudio" preload="auto">
-                        <source src="intro.mp3" type="audio/mpeg">
-                        <source src="assets/audio/intro.mp3" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                    <button id="avatarPlayBtn" class="avatar-play-btn">
-                        <span class="play-icon">▶️</span>
-                    </button>
-                    <div id="audioStatus" class="audio-status"></div>
-                </div>
+            <div class="avatar-container">
+                <img src="creator_avatar.jpg" alt="Ninskie" class="creator-avatar">
+                <audio id="introAudio" preload="auto">
+                    <source src="https://exianninskie.github.io/code-quest-landing/intro.mp3" type="audio/mpeg">
+                    <source src="intro.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <button id="avatarPlayBtn" class="avatar-play-overlay" title="Play introduction">
+                    <svg class="play-svg" id="playSvg" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </button>
             </div>
             <h2>Ninskie</h2>
             <h4>Master Architect & Creator</h4>
@@ -929,74 +899,38 @@
         // Avatar Audio Player
         const audio = document.getElementById('introAudio');
         const avatarPlayBtn = document.getElementById('avatarPlayBtn');
-        const playIcon = avatarPlayBtn.querySelector('.play-icon');
-        const audioStatus = document.getElementById('audioStatus');
-
-        function setStatus(msg) {
-            if (audioStatus) audioStatus.textContent = msg;
-            console.log('[Audio]', msg);
-        }
+        const playSvg = document.getElementById('playSvg');
+        const playPath = playSvg.querySelector('path');
 
         let isPlaying = false;
         audio.volume = 0.7;
-
-        // Log audio events for debugging
-        audio.addEventListener('loadstart', () => setStatus('Loading...'));
-        audio.addEventListener('loadeddata', () => setStatus('Ready'));
-        audio.addEventListener('canplay', () => setStatus('Can play'));
-        audio.addEventListener('canplaythrough', () => setStatus('Fully loaded'));
-        audio.addEventListener('error', (e) => {
-            setStatus('Load error');
-            console.error('[Audio] Error code:', audio.error ? audio.error.code : 'unknown');
-            console.error('[Audio] Error message:', audio.error ? audio.error.message : 'unknown');
-        });
-        audio.addEventListener('stalled', () => setStatus('Stalled'));
-        audio.addEventListener('waiting', () => setStatus('Waiting...'));
-
-        // Explicitly load the audio so the browser picks the first working source
         audio.load();
+
+        const playIconPath = 'M8 5v14l11-7z';
+        const pauseIconPath = 'M6 19h4V5H6v14zm8-14v14h4V5h-4z';
 
         avatarPlayBtn.addEventListener('click', () => {
             if (isPlaying) {
                 audio.pause();
                 avatarPlayBtn.classList.remove('playing');
-                playIcon.textContent = '▶️';
+                playPath.setAttribute('d', playIconPath);
                 isPlaying = false;
-                setStatus('Paused');
             } else {
-                setStatus('Trying to play...');
-                const playPromise = audio.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        avatarPlayBtn.classList.add('playing');
-                        playIcon.textContent = '⏸️';
-                        isPlaying = true;
-                        setStatus('Playing');
-                    }).catch(error => {
-                        setStatus('Play blocked');
-                        console.error('[Audio] play() failed:', error.name, error.message);
-                    });
-                } else {
-                    setStatus('No play promise');
-                }
+                audio.play().then(() => {
+                    avatarPlayBtn.classList.add('playing');
+                    playPath.setAttribute('d', pauseIconPath);
+                    isPlaying = true;
+                }).catch(error => {
+                    console.error('Audio play failed:', error);
+                });
             }
         });
 
         audio.addEventListener('ended', () => {
             avatarPlayBtn.classList.remove('playing');
-            playIcon.textContent = '▶️';
+            playPath.setAttribute('d', playIconPath);
             isPlaying = false;
-            setStatus('Finished');
         });
-
-        // Show network state for debugging
-        setTimeout(() => {
-            const networkStates = ['EMPTY', 'IDLE', 'LOADING', 'NO_SOURCE'];
-            const readyStates = ['HAVE_NOTHING', 'HAVE_METADATA', 'HAVE_CURRENT_DATA', 'HAVE_FUTURE_DATA', 'HAVE_ENOUGH_DATA'];
-            console.log('[Audio] Network state:', networkStates[audio.networkState] || audio.networkState);
-            console.log('[Audio] Ready state:', readyStates[audio.readyState] || audio.readyState);
-            console.log('[Audio] Current src:', audio.currentSrc || 'none');
-        }, 2000);
     </script>
 </body>
 </html>
