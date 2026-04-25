@@ -686,14 +686,15 @@
                 </div>
                 <!-- Audio Player Next to Avatar -->
                 <div class="audio-player-next-to-avatar">
-                    <audio id="introAudio" preload="auto" controls style="width: 200px; height: 40px;">
+                    <audio id="introAudio" preload="auto">
                         <source src="assets/audio/intro.mp3" type="audio/mpeg">
                         <source src="./assets/audio/intro.mp3" type="audio/mpeg">
                         <source src="/assets/audio/intro.mp3" type="audio/mpeg">
                         <source src="https://raw.githubusercontent.com/exianninskie/code-quest/main/assets/audio/intro.mp3" type="audio/mpeg">
+                        <source src="intro.mp3" type="audio/mpeg">
                         Your browser does not support the audio element.
                     </audio>
-                    <button id="avatarPlayBtn" class="avatar-play-btn" style="display: none;">
+                    <button id="avatarPlayBtn" class="avatar-play-btn">
                         <span class="play-icon">▶️</span>
                     </button>
                 </div>
@@ -926,43 +927,23 @@
         
         let isPlaying = false;
         
-        // Debug audio loading
-        console.log('Audio element:', audio);
-        console.log('Audio sources:', audio.querySelectorAll('source'));
-        
         // Set volume to 70%
         audio.volume = 0.7;
         
-        // Audio event listeners for debugging
-        audio.addEventListener('loadstart', () => console.log('Loading audio...'));
-        audio.addEventListener('loadeddata', () => console.log('Audio data loaded'));
-        audio.addEventListener('canplay', () => console.log('Audio can play'));
-        audio.addEventListener('error', (e) => console.error('Audio error:', e));
-        
-        // Try to load audio
-        audio.load();
-        console.log('Audio load() called');
-        
         // Toggle audio play/pause
         avatarPlayBtn.addEventListener('click', () => {
-            console.log('Button clicked, isPlaying:', isPlaying);
-            
             if (isPlaying) {
                 audio.pause();
                 avatarPlayBtn.classList.remove('playing');
                 playIcon.textContent = '▶️';
                 isPlaying = false;
-                console.log('Audio paused');
             } else {
-                console.log('Attempting to play audio...');
                 audio.play().then(() => {
                     avatarPlayBtn.classList.add('playing');
                     playIcon.textContent = '⏸️';
                     isPlaying = true;
-                    console.log('Audio playing successfully');
                 }).catch(error => {
                     console.error('Audio play failed:', error);
-                    alert('Audio play failed: ' + error.message);
                 });
             }
         });
@@ -972,7 +953,6 @@
             avatarPlayBtn.classList.remove('playing');
             playIcon.textContent = '▶️';
             isPlaying = false;
-            console.log('Audio ended');
         });
     </script>
 </body>
