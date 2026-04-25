@@ -686,8 +686,7 @@
                         <path d="M8 5v14l11-7z"/>
                     </svg>
                 </button>
-                <div id="audioError" class="audio-error" style="display:none;"></div>
-            </div>
+                            </div>
             <h2>Ninskie</h2>
             <h4>Master Architect & Creator</h4>
             
@@ -914,12 +913,10 @@
         const avatarPlayBtn = document.getElementById('avatarPlayBtn');
         const playSvg = document.getElementById('playSvg');
         const playPath = playSvg.querySelector('path');
-        const audioError = document.getElementById('audioError');
 
         let isPlaying = false;
         audio.volume = 0.7;
-        audio.preload = 'auto';
-        audio.src = 'intro.mp3'; // ← relative path, no fetch needed
+        audio.load(); // Force load the audio
 
         const playIconPath = 'M8 5v14l11-7z';
         const pauseIconPath = 'M6 19h4V5H6v14zm8-14v14h4V5h-4z';
@@ -935,10 +932,8 @@
                     avatarPlayBtn.classList.add('playing');
                     playPath.setAttribute('d', pauseIconPath);
                     isPlaying = true;
-                    if (audioError) audioError.style.display = 'none';
                 }).catch(err => {
-                    audioError.textContent = 'Tap again to play';
-                    audioError.style.display = 'block';
+                    console.error('Audio play error:', err);
                 });
             }
         });
@@ -947,13 +942,6 @@
             avatarPlayBtn.classList.remove('playing');
             playPath.setAttribute('d', playIconPath);
             isPlaying = false;
-        });
-
-        audio.addEventListener('error', () => {
-            if (audioError) {
-                audioError.textContent = 'Audio load error';
-                audioError.style.display = 'block';
-            }
         });
     </script>
 </body>
