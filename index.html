@@ -1011,26 +1011,65 @@
         
         // Add test info to console
         console.log('Audio tests available: call testAudio() or checkAudioFile() in console');
+        console.log('Direct audio link:', window.location.origin + '/intro.mp3');
 
         const playIconPath = 'M8 5v14l11-7z';
         const pauseIconPath = 'M6 19h4V5H6v14zm8-14v14h4V5h-4z';
 
         avatarPlayBtn.addEventListener('click', () => {
+            console.log('Avatar button clicked!');
+            
             if (isPlaying) {
                 audio.pause();
                 avatarPlayBtn.classList.remove('playing');
                 playPath.setAttribute('d', playIconPath);
                 isPlaying = false;
+                console.log('Audio paused');
             } else {
-                audio.play().then(() => {
+                console.log('Attempting to play audio...');
+                console.log('Audio src:', audio.src);
+                console.log('Audio ready state:', audio.readyState);
+                
+                // Ensure audio is loaded before playing
+                if (audio.readyState < 2) {
+                    console.log('Audio not ready, loading...');
+                    audio.load();
+                    
+                    audio.addEventListener('canplay', function playWhenReady() {
+                        console.log('Audio can play now, attempting playback...');
+                        attemptPlay();
+                        audio.removeEventListener('canplay', playWhenReady);
+                    });
+                } else {
+                    attemptPlay();
+                }
+            }
+        });
+
+        function attemptPlay() {
+            // Create user interaction context
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log('Audio play successful!');
                     avatarPlayBtn.classList.add('playing');
                     playPath.setAttribute('d', pauseIconPath);
                     isPlaying = true;
                 }).catch(err => {
-                    console.error('Audio play error:', err);
+                    console.error('Audio play failed:', err);
+                    console.error('Error name:', err.name);
+                    console.error('Error message:', err.message);
+                    
+                    // Show user-friendly message
+                    if (err.name === 'NotAllowedError') {
+                        console.log('Browser blocked autoplay - user interaction required');
+                    } else if (err.name === 'NotSupportedError') {
+                        console.log('Audio format not supported');
+                    }
                 });
             }
-        });
+        }
 
         audio.addEventListener('ended', () => {
             avatarPlayBtn.classList.remove('playing');
