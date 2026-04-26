@@ -933,9 +933,9 @@
             console.log('Audio element:', audio);
             console.log('Audio sources:', audio.children);
             
-            // Set audio source directly
-            audio.src = 'intro.mp3';
-            audio.load();
+            // Audio source temporarily disabled
+            // audio.src = 'intro.mp3';
+            // audio.load();
         }
 
         // Add error handling to main audio
@@ -966,32 +966,17 @@
 
         // Add a simple test button for debugging (remove later)
         window.testAudio = function() {
-            console.log('Testing audio directly...');
-            const testAudio = new Audio('intro.mp3');
-            testAudio.play().then(() => {
-                console.log('Direct audio play successful!');
-            }).catch(err => {
-                console.error('Direct audio play failed:', err);
-            });
+            console.log('Audio testing temporarily disabled - intro.mp3 not available');
         };
 
         // Test if audio file exists
         window.checkAudioFile = function() {
-            fetch('intro.mp3', { method: 'HEAD' })
-                .then(response => {
-                    console.log('Audio file response:', response);
-                    console.log('Audio file exists:', response.ok);
-                    console.log('Content-Type:', response.headers.get('Content-Type'));
-                    console.log('Content-Length:', response.headers.get('Content-Length'));
-                })
-                .catch(err => {
-                    console.error('Audio file check failed:', err);
-                });
+            console.log('Audio file check temporarily disabled - intro.mp3 not available');
         };
         
         // Add test info to console
-        console.log('Audio tests available: call testAudio() or checkAudioFile() in console');
-        console.log('Direct audio link:', window.location.origin + '/intro.mp3');
+        console.log('Audio tests temporarily disabled - intro.mp3 file issue');
+        console.log('Button test available: call testButton() in console');
         
         // Simple test to verify button works
         window.testButton = function() {
