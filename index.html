@@ -931,45 +931,9 @@
             console.log('Audio element:', audio);
             console.log('Audio sources:', audio.children);
             
-            // Test direct URL loading
-            const testAudio = new Audio();
-            testAudio.src = 'intro.mp3';
-            
-            testAudio.addEventListener('canplay', function() {
-                console.log('Direct audio load successful - setting main audio src');
-                audio.src = 'intro.mp3';
-                audio.load();
-            });
-            
-            testAudio.addEventListener('error', function(e) {
-                console.error('Direct audio load failed, trying fallback paths');
-                // Try alternative paths
-                const fallbackPaths = ['./intro.mp3', '/intro.mp3', window.location.origin + '/intro.mp3'];
-                
-                fallbackPaths.forEach((path, index) => {
-                    console.log(`Trying fallback path ${index + 1}: ${path}`);
-                    const fallbackAudio = new Audio();
-                    fallbackAudio.src = path;
-                    
-                    fallbackAudio.addEventListener('canplay', function() {
-                        console.log(`Fallback path ${index + 1} successful: ${path}`);
-                        audio.src = path;
-                        audio.load();
-                        return;
-                    });
-                    
-                    fallbackAudio.addEventListener('error', function() {
-                        console.error(`Fallback path ${index + 1} failed: ${path}`);
-                        if (index === fallbackPaths.length - 1) {
-                            console.error('All audio paths failed');
-                        }
-                    });
-                    
-                    fallbackAudio.load();
-                });
-            });
-            
-            testAudio.load();
+            // Set audio source directly
+            audio.src = 'intro.mp3';
+            audio.load();
         }
 
         // Add error handling to main audio
