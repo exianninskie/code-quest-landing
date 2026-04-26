@@ -908,22 +908,93 @@
 
         let isPlaying = false;
         audio.volume = 0.7;
-        audio.load(); // Force load the audio
 
-        // Add error handling
+        // Comprehensive audio loading and debugging
+        function initAudio() {
+            console.log('Initializing audio player...');
+            console.log('Audio element:', audio);
+            console.log('Audio sources:', audio.children);
+            
+            // Test direct URL loading
+            const testAudio = new Audio();
+            testAudio.src = 'intro.mp3';
+            
+            testAudio.addEventListener('canplay', function() {
+                console.log('Direct audio load successful - setting main audio src');
+                audio.src = 'intro.mp3';
+                audio.load();
+            });
+            
+            testAudio.addEventListener('error', function(e) {
+                console.error('Direct audio load failed, trying fallback paths');
+                // Try alternative paths
+                const fallbackPaths = ['./intro.mp3', '/intro.mp3', window.location.origin + '/intro.mp3'];
+                
+                fallbackPaths.forEach((path, index) => {
+                    console.log(`Trying fallback path ${index + 1}: ${path}`);
+                    const fallbackAudio = new Audio();
+                    fallbackAudio.src = path;
+                    
+                    fallbackAudio.addEventListener('canplay', function() {
+                        console.log(`Fallback path ${index + 1} successful: ${path}`);
+                        audio.src = path;
+                        audio.load();
+                        return;
+                    });
+                    
+                    fallbackAudio.addEventListener('error', function() {
+                        console.error(`Fallback path ${index + 1} failed: ${path}`);
+                        if (index === fallbackPaths.length - 1) {
+                            console.error('All audio paths failed');
+                        }
+                    });
+                    
+                    fallbackAudio.load();
+                });
+            });
+            
+            testAudio.load();
+        }
+
+        // Add error handling to main audio
         audio.addEventListener('error', function(e) {
-            console.error('Audio error:', e);
+            console.error('Main audio error:', e);
             console.error('Audio error code:', audio.error ? audio.error.code : 'unknown');
             console.error('Audio src:', audio.src);
+            console.error('Network state:', audio.networkState);
+            console.error('Ready state:', audio.readyState);
         });
 
         audio.addEventListener('loadeddata', function() {
             console.log('Audio loaded successfully');
+            console.log('Audio duration:', audio.duration);
+            console.log('Audio ready state:', audio.readyState);
         });
 
         audio.addEventListener('canplay', function() {
-            console.log('Audio can play');
+            console.log('Audio can play - duration:', audio.duration);
         });
+
+        audio.addEventListener('loadstart', function() {
+            console.log('Audio load started');
+        });
+
+        // Initialize audio when page loads
+        initAudio();
+
+        // Add a simple test button for debugging (remove later)
+        window.testAudio = function() {
+            console.log('Testing audio directly...');
+            const testAudio = new Audio('intro.mp3');
+            testAudio.play().then(() => {
+                console.log('Direct audio play successful!');
+            }).catch(err => {
+                console.error('Direct audio play failed:', err);
+            });
+        };
+        
+        // Add test info to console
+        console.log('Audio test available: call testAudio() in console');
 
         const playIconPath = 'M8 5v14l11-7z';
         const pauseIconPath = 'M6 19h4V5H6v14zm8-14v14h4V5h-4z';
