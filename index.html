@@ -678,11 +678,10 @@
         <div class="creator-profile" id="creator">
             <div class="avatar-container">
                 <img src="creator_avatar.jpg" alt="Ninskie" class="creator-avatar">
-                <audio id="introAudio" preload="auto">
-                <source src="intro_backup.mp3" type="audio/mpeg">
-                <source src="intro_backup.mp3" type="audio/mp3">
-                Your browser does not support the audio element.
-            </audio>
+                <!-- Audio temporarily disabled due to GitHub Pages serving issues -->
+            <div id="audioPlaceholder" style="display: none;">
+                <p>🎵 Audio introduction temporarily unavailable</p>
+            </div>
                 <button id="avatarPlayBtn" class="avatar-play-overlay" title="Play introduction">
                     <svg class="play-svg" id="playSvg" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z"/>
@@ -1017,34 +1016,22 @@
                     window.audioPlayer.isPlaying = false;
                     console.log('Audio paused');
                 } else {
-                    console.log('Attempting to play audio...');
-                    console.log('Audio src:', window.audioPlayer.audio.src);
-                    console.log('Audio ready state:', window.audioPlayer.audio.readyState);
+                    console.log('Audio temporarily disabled - showing message');
                     
-                    // Set audio source and play
-                    window.audioPlayer.audio.src = 'intro_backup.mp3';
-                    window.audioPlayer.audio.load();
+                    // Show visual feedback
+                    window.audioPlayer.avatarPlayBtn.classList.add('playing');
+                    window.audioPlayer.playPath.setAttribute('d', pauseIconPath);
+                    window.audioPlayer.isPlaying = true;
                     
-                    const playPromise = window.audioPlayer.audio.play();
-                    if (playPromise !== undefined) {
-                        playPromise.then(() => {
-                            console.log('Audio playing successfully!');
-                            window.audioPlayer.avatarPlayBtn.classList.add('playing');
-                            window.audioPlayer.playPath.setAttribute('d', pauseIconPath);
-                            window.audioPlayer.isPlaying = true;
-                        }).catch(err => {
-                            console.error('Audio play failed:', err);
-                            console.error('Error name:', err.name);
-                            console.error('Error message:', err.message);
-                            
-                            // Show user-friendly message
-                            if (err.name === 'NotAllowedError') {
-                                console.log('Browser blocked autoplay - user interaction required');
-                            } else if (err.name === 'NotSupportedError') {
-                                console.log('Audio format not supported');
-                            }
-                        });
-                    }
+                    // Show temporary message
+                    alert('🎵 Audio introduction temporarily unavailable due to GitHub Pages serving issues. The audio feature will be restored soon!');
+                    
+                    // Reset after 2 seconds
+                    setTimeout(() => {
+                        window.audioPlayer.avatarPlayBtn.classList.remove('playing');
+                        window.audioPlayer.playPath.setAttribute('d', playIconPath);
+                        window.audioPlayer.isPlaying = false;
+                    }, 2000);
                 }
             });
         }
