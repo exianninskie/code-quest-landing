@@ -25,7 +25,7 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Create pages directory
-        run: mkdir -p pages && cp index.html pages/ && cp library_bg.png pages/ 2>/dev/null || true && cp creator_avatar.jpg pages/ 2>/dev/null || true && cp code_quest_logo.png pages/ 2>/dev/null || true
+        run: mkdir -p pages && cp index.html pages/ && cp library_bg.png pages/ 2>/dev/null || true && cp creator_avatar.jpg pages/ 2>/dev/null || true && cp code_quest_logo.png pages/ 2>/dev/null || true && cp intro.mp3 pages/ 2>/dev/null || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
