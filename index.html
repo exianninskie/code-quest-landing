@@ -892,6 +892,8 @@
     </footer>
 
     <script>
+        console.log('JavaScript loaded successfully!');
+        
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -903,10 +905,22 @@
         });
 
         // Avatar Audio Player
+        console.log('Setting up audio player...');
+        
         const audio = document.getElementById('introAudio');
         const avatarPlayBtn = document.getElementById('avatarPlayBtn');
         const playSvg = document.getElementById('playSvg');
-        const playPath = playSvg.querySelector('path');
+        const playPath = playSvg ? playSvg.querySelector('path') : null;
+        
+        console.log('Audio element:', audio);
+        console.log('Play button:', avatarPlayBtn);
+        console.log('Play SVG:', playSvg);
+        console.log('Play path:', playPath);
+        
+        if (!audio || !avatarPlayBtn || !playSvg || !playPath) {
+            console.error('Missing audio player elements!');
+            return;
+        }
 
         let isPlaying = false;
         audio.volume = 0.7;
@@ -1012,6 +1026,19 @@
         // Add test info to console
         console.log('Audio tests available: call testAudio() or checkAudioFile() in console');
         console.log('Direct audio link:', window.location.origin + '/intro.mp3');
+        
+        // Simple test to verify button works
+        window.testButton = function() {
+            console.log('Testing button click...');
+            if (avatarPlayBtn) {
+                console.log('Button found, clicking...');
+                avatarPlayBtn.click();
+            } else {
+                console.error('Button not found!');
+            }
+        };
+        
+        console.log('Button test available: call testButton() in console');
 
         const playIconPath = 'M8 5v14l11-7z';
         const pauseIconPath = 'M6 19h4V5H6v14zm8-14v14h4V5h-4z';
