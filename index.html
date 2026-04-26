@@ -678,8 +678,10 @@
         <div class="creator-profile" id="creator">
             <div class="avatar-container">
                 <img src="creator_avatar.jpg" alt="Ninskie" class="creator-avatar">
-                <audio id="introAudio">
+                <audio id="introAudio" preload="auto">
                 <source src="intro.mp3" type="audio/mpeg">
+                <source src="./intro.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
             </audio>
                 <button id="avatarPlayBtn" class="avatar-play-overlay" title="Play introduction">
                     <svg class="play-svg" id="playSvg" viewBox="0 0 24 24">
@@ -907,6 +909,21 @@
         let isPlaying = false;
         audio.volume = 0.7;
         audio.load(); // Force load the audio
+
+        // Add error handling
+        audio.addEventListener('error', function(e) {
+            console.error('Audio error:', e);
+            console.error('Audio error code:', audio.error ? audio.error.code : 'unknown');
+            console.error('Audio src:', audio.src);
+        });
+
+        audio.addEventListener('loadeddata', function() {
+            console.log('Audio loaded successfully');
+        });
+
+        audio.addEventListener('canplay', function() {
+            console.log('Audio can play');
+        });
 
         const playIconPath = 'M8 5v14l11-7z';
         const pauseIconPath = 'M6 19h4V5H6v14zm8-14v14h4V5h-4z';
