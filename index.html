@@ -71,6 +71,94 @@
 
         .nav-links a:hover { color: var(--purple-glow); }
 
+        /* --- BRAND IDENTITY SECTION --- */
+        .brand-identity {
+            padding: 100px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .brand-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .brand-card {
+            background: linear-gradient(135deg, rgba(83, 74, 183, 0.15), rgba(180, 168, 255, 0.1));
+            border: 1px solid var(--purple-glow);
+            padding: 40px;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(180, 168, 255, 0.1) 0%, transparent 70%);
+            animation: float 8s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-20px, 20px); }
+        }
+
+        .brand-card h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--purple-glow);
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-card p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .symbol-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .symbol-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .symbol-item h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .symbol-item p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0;
+        }
+
         /* --- HERO SECTION --- */
         .hero {
             min-height: 100vh;
@@ -664,6 +752,7 @@
             CODE <span>QUEST</span>
         </a>
         <div class="nav-links">
+            <a href="#brand-identity">Brand</a>
             <a href="#features">Features</a>
             <a href="#tech-stack">Tech Stack</a>
             <a href="#badges">Badges</a>
@@ -698,6 +787,68 @@
             </div>
         </div>
     </header>
+
+    <section class="brand-identity" id="brand-identity">
+        <h2 style="font-size: 40px; text-align: center; margin-bottom: 20px;">BRAND IDENTITY</h2>
+        <p style="text-align: center; color: rgba(255, 255, 255, 0.6); max-width: 700px; margin: 0 auto 60px;">The meaning behind Code Quest and our purple identity</p>
+        
+        <div class="brand-grid">
+            <div class="brand-card">
+                <h3>Why Code Quest?</h3>
+                <p>The name embodies our core philosophy:</p>
+                <div class="symbol-grid">
+                    <div class="symbol-item">
+                        <span class="symbol-icon">🎯</span>
+                        <h4>Code</h4>
+                        <p>The skill we teach, the craft we master</p>
+                    </div>
+                    <div class="symbol-item">
+                        <span class="symbol-icon">⚔️</span>
+                        <h4>Quest</h4>
+                        <p>Learning as an adventure, not a chore</p>
+                    </div>
+                    <div class="symbol-item">
+                        <span class="symbol-icon">🏰</span>
+                        <h4>Fantasy</h4>
+                        <p>Gamification makes learning addictive</p>
+                    </div>
+                    <div class="symbol-item">
+                        <span class="symbol-icon">📖</span>
+                        <h4>Story</h4>
+                        <p>Every chapter is a narrative journey</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="brand-card">
+                <h3>Why Purple?</h3>
+                <p>Purple symbolizes transformation and magic in our design:</p>
+                <div class="symbol-grid">
+                    <div class="symbol-item">
+                        <span class="symbol-icon">👑</span>
+                        <h4>Royalty & Wisdom</h4>
+                        <p>Mastery and expertise in coding</p>
+                    </div>
+                    <div class="symbol-item">
+                        <span class="symbol-icon">✨</span>
+                        <h4>Creativity & Magic</h4>
+                        <p>Coding as a creative art form</p>
+                    </div>
+                    <div class="symbol-item">
+                        <span class="symbol-icon">🔮</span>
+                        <h4>Mystery & Discovery</h4>
+                        <p>The thrill of learning something new</p>
+                    </div>
+                    <div class="symbol-item">
+                        <span class="symbol-icon">💜</span>
+                        <h4>Ambition</h4>
+                        <p>Premium learning experience</p>
+                    </div>
+                </div>
+                <p style="margin-top: 30px; font-size: 14px; color: rgba(255, 255, 255, 0.7); font-style: italic;">Purple is also the aura of our first chapter (Variables), representing the foundation of all coding journeys.</p>
+            </div>
+        </div>
+    </section>
 
     <section class="features" id="features">
         <h2 style="font-size: 40px; text-align: center; margin-bottom: 60px;">FEATURES</h2>
