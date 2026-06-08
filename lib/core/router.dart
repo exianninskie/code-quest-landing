@@ -87,14 +87,14 @@ GoRouter router(RouterRef ref) {
                 path: 'privacy-policy',
                 builder: (context, state) => const LegalScreen(
                   title: '',
-                  assetPath: 'assets/docs/privacy_policy.md',
+                  assetPath: 'docs/privacy_policy.md',
                 ),
               ),
               GoRoute(
                 path: 'terms-of-service',
                 builder: (context, state) => const LegalScreen(
                   title: '',
-                  assetPath: 'assets/docs/terms_of_service.md',
+                  assetPath: 'docs/terms_of_service.md',
                 ),
               ),
             ],

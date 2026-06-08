@@ -105,6 +105,11 @@ Future<Set<String>> solvedPuzzleIds(SolvedPuzzleIdsRef ref) async {
   return progress.where((p) => p.completed).map((p) => p.puzzleId).toSet();
 }
 
+@riverpod
+Future<List<String>> allPuzzleQuestions(AllPuzzleQuestionsRef ref) {
+  return ref.watch(gameServiceProvider).fetchAllPuzzleQuestions();
+}
+
 class GameService {
   final SupabaseClient _client;
   GameService(this._client);
@@ -182,6 +187,11 @@ class GameService {
         .single();
 
     return Puzzle.fromJson(data);
+  }
+
+  Future<List<String>> fetchAllPuzzleQuestions() async {
+    final data = await _client.from('puzzles').select('question');
+    return (data as List).map((e) => e['question'] as String).toList();
   }
 
   // ──────────────────────────────────────────

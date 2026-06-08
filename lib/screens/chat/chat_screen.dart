@@ -18,6 +18,8 @@ class ChatScreen extends ConsumerStatefulWidget {
 }
 
 class _ChatScreenState extends ConsumerState<ChatScreen> {
+  final TextEditingController _messageController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +30,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ref.read(gameServiceProvider).updateLastActive(user.id);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -160,9 +168,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 2),
                                         child: InkWell(
-                                          onTap: () => ref
-                                              .read(chatServiceProvider)
-                                              .sendMessage(template),
+                                          onTap: () => _handleSendMessage(context, ref, template),
                                           borderRadius: BorderRadius.circular(8),
                                           child: Container(
                                             height: 48,
@@ -192,6 +198,47 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                         ),
                                       ),
                                     ).animate().fadeIn(delay: 200.ms),
+                                ],
+                              ),
+                            ),
+                            const Gap(12),
+                            // Text input field for custom messages
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.1),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      controller: _messageController,
+                                      style: GoogleFonts.spaceGrotesk(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                      decoration: InputDecoration(
+                                        hintText: 'Type a message...',
+                                        hintStyle: GoogleFonts.spaceGrotesk(
+                                          color: Colors.white38,
+                                          fontSize: 14,
+                                        ),
+                                        border: InputBorder.none,
+                                        contentPadding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 12,
+                                        ),
+                                      ),
+                                      onSubmitted: (value) => _handleSendMessage(context, ref, value),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.send, color: Color(0xFF534AB7)),
+                                    onPressed: () => _handleSendMessage(context, ref, _messageController.text),
+                                  ),
                                 ],
                               ),
                             ),
@@ -245,6 +292,44 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             child: const Text('PURGE',
                 style: TextStyle(
                     color: Colors.redAccent, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _handleSendMessage(BuildContext context, WidgetRef ref, String message) async {
+    if (message.trim().isEmpty) return;
+    
+    final puzzleQuestionsAsync = ref.read(allPuzzleQuestionsProvider);
+    final puzzleQuestions = puzzleQuestionsAsync.valueOrNull ?? [];
+    
+    if (ref.read(chatServiceProvider).containsPuzzleContent(message, puzzleQuestions)) {
+      _showPuzzleContentWarning(context);
+    } else {
+      ref.read(chatServiceProvider).sendMessage(message);
+      _messageController.clear();
+    }
+  }
+
+  void _showPuzzleContentWarning(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey[900],
+        title: Text(
+          'SOUL LINK RESTRICTION',
+          style: GoogleFonts.cinzel(
+              color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'You are not allowed to share puzzle questions in the Soul Link chat. Please solve the puzzles on your own!',
+          style: GoogleFonts.spaceGrotesk(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
