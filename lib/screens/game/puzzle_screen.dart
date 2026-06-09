@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -396,22 +397,27 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> {
 
                 // ── Code snippet ──
                 const Gap(12),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1A1830),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    puzzle.question,
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFFCECBF6),
-                      height: 1.5,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1A1830),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          puzzle.question,
+                          style: GoogleFonts.spaceGrotesk(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFFCECBF6),
+                            height: 1.5,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ).animate().fadeIn(delay: 150.ms),
 
                 const Gap(24),
